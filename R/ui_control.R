@@ -1,11 +1,3 @@
-card_description_app <- bs4Card(
-  inputID = "description_app",
-  title = "About",
-  status = "secondary",
-  width = 12,
-  includeMarkdown("doc/about.md")
-)
-
 card_session_create <- bs4Card(
   inputID = "session_create",
   title = "New session",
@@ -111,19 +103,7 @@ card_run <- bs4Card(
 tab_control <- bs4TabItem(
   "control",
   fluidRow(
-    column(
-      4,
-      card_description_app
-    ),
-    column(
-      4,
-      card_session_manage,
-      card_session_create
-    ),
-    column(
-      4,
-      card_run,
-      card_models
-    )
+    column(6, card_session_manage, card_session_create),
+    column(6, card_run, card_models)
   )
 )
