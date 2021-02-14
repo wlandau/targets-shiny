@@ -1,16 +1,16 @@
 write_functions <- function(dir) {
   tar_helper(file.path(dir, "functions.R"), {
-    get_data_long <- function() {
+    get_data_biomarker <- function() {
       pbcLong %>%
         rename(log_bilirubin = logBili) %>%
         mutate(log_platelet = log(platelet))
     }
-    fit_model <- function(data_long, biomarker, iterations) {
+    fit_model <- function(data_biomarker, biomarker, iterations) {
       model <- stan_jm(
         formulaLong = as.formula(paste(biomarker, "~ year + (1 | id)")),
         formulaEvent = Surv(futimeYears, death) ~ sex + trt,
         time_var = "year",
-        dataLong = data_long,
+        dataLong = data_biomarker,
         dataEvent = pbcSurv,
         iter = iterations
       )
@@ -27,7 +27,11 @@ write_functions <- function(dir) {
   })
 }
 
-write_pipeline <- function(dir, biomarkers =  c("albumin", "log_bilirubin", "log_platelet")) {
+write_pipeline <- function(
+  dir,
+  biomarkers =  c("albumin", "log_bilirubin", "log_platelet"),
+  iterations = 1000
+) {
   tar_helper(file.path(dir, "_targets.R"), {
     library(dplyr)
     library(targets)
@@ -41,10 +45,10 @@ write_pipeline <- function(dir, biomarkers =  c("albumin", "log_bilirubin", "log
     )
     models <- tar_map(
       values = list(biomarker = !!biomarkers),
-      tar_fst_tbl(model, fit_model(data_long, biomarker, 1000))
+      tar_fst_tbl(model, fit_model(data_biomarker, biomarker, !!iterations))
     )
     list(
-      tar_target(data_long, get_data_long()),
+      tar_target(data_biomarker, get_data_biomarker()),
       models,
       tar_combine(samples, models),
       tar_qs(plot, plot_samples(samples))
