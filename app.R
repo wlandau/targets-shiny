@@ -1,6 +1,4 @@
 source("R/packages.R")
-source("R/ui_control.R")
-source("R/ui_progress.R")
 source("R/ui.R")
 source("R/server.R")
 shinyApp(ui = ui, server = server)

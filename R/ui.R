@@ -1,3 +1,6 @@
+source("R/ui_control.R")
+source("R/ui_progress.R")
+
 tabs <- bs4TabItems(
   tab_control,
   tab_progress
