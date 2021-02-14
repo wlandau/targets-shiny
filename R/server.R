@@ -1,16 +1,23 @@
 server <- function(input, output, session) {
-  session_choices <- reactiveValues(names = session_list())
-  output$session_choose <- renderUI(
+  session_active_restore()
+  sessions <- reactiveValues(
+    active = session_active_get(),
+    choices = session_list()
+  )
+  output$session_active <- renderUI(
     pickerInput(
-      inputId = "session_choose",
+      inputId = "session_active",
       label = NULL,
-      choices = session_choices$names,
-      selected = "main",
+      choices = sessions$choices,
+      selected = sessions$active,
       multiple = FALSE
     )
   )
+  observe({
+    sessions$active <- input$session_active
+  })
   observeEvent(input$session_create, {
     session_create(input$session_new)
-    session_choices$names <- session_list()
+    sessions$choices <- session_list()
   })
 }
