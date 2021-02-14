@@ -8,11 +8,11 @@ The [`targets`](https://docs.ropensci.org/targets/) R package orchestrates tasks
 
 ## Shiny
 
-This Shiny app contains a [`targets`](https://docs.ropensci.org/targets/) pipeline to run Bayesian joint models with [`rstanarm`](https://mc-stan.org/rstanarm/) ([Stan Development Team 2017](https://cran.r-project.org/web/packages/rstanarm/vignettes/jm.html), [Brilleman 2017](https://cran.r-project.org/web/packages/rstanarm/vignettes/jm.html)). This app can manage multiple sessions with [persistent storage]() and persistently running [`targets`](https://docs.ropensci.org/targets/) pipelines, and users can recover their sessions after logging out.
+This Shiny app contains a [`targets`](https://docs.ropensci.org/targets/) pipeline to run Bayesian joint models with [`rstanarm`](https://mc-stan.org/rstanarm/) ([Brilleman 2017](https://cran.r-project.org/web/packages/rstanarm/vignettes/jm.html)). This app can manage multiple sessions with [persistent storage](https://blog.r-hub.io/2020/03/12/user-preferences/) and persistently running [`targets`](https://docs.ropensci.org/targets/) pipelines, and users can recover their sessions after logging out.
 
 ## Administration
 
-1. Deploy the app to [RStudio Server](), [RStudio Connect](), or other service that supports persistent server-side storage.
+1. Deploy the app to [RStudio Server](https://rstudio.com/products/rstudio-server-pro/), [RStudio Connect](https://rstudio.com/products/connect/), or other service that supports persistent server-side storage.
 2. Run the app as the logged-in user, not the system administrator.
 
 ## Usage
@@ -35,5 +35,6 @@ As long as the app is administered properly, you can safely log out and log back
 
 ## References
 
-1. Gould AL, Boye ME, Crowther MJ, Ibrahim JG, Quartey G, Micallef S, et al. "Joint modeling of survival and longitudinal non-survival data: current methods and issues. Report of the DIA Bayesian joint modeling working group." *Stat Med.* 2015; 34(14): 2181-95.
-1. Gelman A, Vehtari A, Simpson D, Margossian CC, Carpenter B, Yao Y, Kennedy L, Gabry J, Burkner PC, Modrak M. "Bayesian Workflow."  	*arXiv* 2020, arXiv:2011.01808, <https://arxiv.org/abs/2011.01808>.
+1. Brilleman S. "Estimating Joint Models for Longitudinal and Time-to-Event Data with rstanarm." `rstanarm`, Stan Development Team, 2020. <https://cran.r-project.org/web/packages/rstanarm/vignettes/jm.html>
+2. Gelman A, Vehtari A, Simpson D, Margossian CC, Carpenter B, Yao Y, Kennedy L, Gabry J, Burkner PC, Modrak M. "Bayesian Workflow."  	*arXiv* 2020, arXiv:2011.01808, <https://arxiv.org/abs/2011.01808>.
+3. Gould AL, Boye ME, Crowther MJ, Ibrahim JG, Quartey G, Micallef S, et al. "Joint modeling of survival and longitudinal non-survival data: current methods and issues. Report of the DIA Bayesian joint modeling working group." *Stat Med.* 2015; 34(14): 2181-95.
