@@ -1,8 +1,16 @@
+card_description_app <- bs4Card(
+  inputID = "description_app",
+  title = "About",
+  status = "secondary",
+  width = 12,
+  includeMarkdown("doc/about.md")
+)
+
 card_session_create <- bs4Card(
   inputID = "session_create",
   title = "New session",
   status = "primary",
-  width = 6,
+  width = 12,
   textInput(
     inputId = "session_new",
     label = NULL,
@@ -24,7 +32,7 @@ card_session_manage <- bs4Card(
   inputID = "session_manage",
   title = "Active session",
   status = "primary",
-  width = 6,
+  width = 12,
   pickerInput(
     inputId = "session_choose",
     label = NULL,
@@ -47,7 +55,7 @@ card_models <- bs4Card(
   inputID = "models",
   title = "Models",
   status = "primary",
-  width = 6,
+  width = 12,
   pickerInput(
     inputId = "biomarkers",
     label = "Biomarkers",
@@ -61,8 +69,8 @@ card_models <- bs4Card(
       noneSelectedText = "no label"
     )
   ),
-  shinyWidgets::chooseSliderSkin("Flat", color = "blue"),
-  shiny::sliderInput(
+  chooseSliderSkin("Flat", color = "blue"),
+  sliderInput(
     inputId = "iterations",
     label = "Iterations",
     value = 1000,
@@ -77,7 +85,7 @@ card_run <- bs4Card(
   inputID = "run",
   title = "Run",
   status = "primary",
-  width = 6,
+  width = 12,
   actionBttn(
     inputId = "run_start",
     label = "Run pipeline",
@@ -103,11 +111,19 @@ card_run <- bs4Card(
 tab_control <- bs4TabItem(
   "control",
   fluidRow(
-    card_session_manage,
-    card_session_create
-  ),
-  fluidRow(
-    card_run,
-    card_models
+    column(
+      4,
+      card_description_app
+    ),
+    column(
+      4,
+      card_session_manage,
+      card_session_create
+    ),
+    column(
+      4,
+      card_run,
+      card_models
+    )
   )
 )

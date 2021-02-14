@@ -1,7 +1,7 @@
 card_association <- bs4Card(
   inputID = "association",
   title = "Association",
-  status = "primary",
+  status = "success",
   width = 8,
   div("read the plot")
 )
