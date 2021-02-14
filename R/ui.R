@@ -98,7 +98,7 @@ card_run <- bs4Card(
   br(),
   actionBttn(
     inputId = "run_cancel",
-    label = "Cancel pipeline",
+    label = "Cancel run",
     style = "simple",
     color = "danger",
     size = "sm",
