@@ -1,14 +1,3 @@
-library(dplyr)
-library(targets)
-library(tarchetypes)
-library(tidyr)
-
-tar_option_set(
-  packages = c("ggplot2", "rstanarm", "tibble"),
-  memory = "transient",
-  garbage_collection = "true"
-)
-
 preprocess_data_long <- function() {
   pbcLong %>%
     rename(log_bilirubin = logBili) %>%
@@ -35,6 +24,17 @@ plot_samples <- function(samples) {
     geom_density(aes(x = alpha, fill = biomarker), alpha = 0.5) +
     theme_gray(16)
 }
+
+library(dplyr)
+library(targets)
+library(tarchetypes)
+library(tidyr)
+
+tar_option_set(
+  packages = c("ggplot2", "rstanarm", "tibble"),
+  memory = "transient",
+  garbage_collection = "true"
+)
 
 models <- tar_map(
   values = list(biomarker = c("albumin", "log_bilirubin", "log_platelet")),
