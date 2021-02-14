@@ -1,48 +1,49 @@
-card_sessions <- bs4Card(
-  inputID = "sessions",
-  title = "Sessions",
+card_session_create <- bs4Card(
+  inputID = "session_create",
+  title = "New session",
   status = "primary",
   closable = FALSE,
   collapsible = FALSE,
-  width = 8,
-  fluidRow(
-    column(
-      6,
-      textInput(
-        inputId = "session_new",
-        label = "New session",
-        value = NULL,
-        placeholder = "new_session_name"
-      ),
-      actionBttn(
-        inputId = "session_create",
-        label = "Create new session",
-        style = "simple",
-        color = "primary",
-        size = "sm",
-        block = FALSE,
-        no_outline = TRUE
-      )
-    ),
-    column(
-      6,
-      pickerInput(
-        inputId = "session_choose",
-        label = "Choose active session",
-        choices = c("main", "other"),
-        selected = "main",
-        multiple = FALSE
-      ),
-      actionBttn(
-        inputId = "session_delete",
-        label = "Delete current session",
-        style = "simple",
-        color = "primary",
-        size = "sm",
-        block = FALSE,
-        no_outline = TRUE
-      )
-    )
+  width = 6,
+  textInput(
+    inputId = "session_new",
+    label = NULL,
+    value = NULL,
+    placeholder = "new_session_name"
+  ),
+  actionBttn(
+    inputId = "session_create",
+    label = "Create new session",
+    style = "simple",
+    color = "primary",
+    size = "sm",
+    block = FALSE,
+    no_outline = TRUE
+  )
+)
+
+card_session_manage <- bs4Card(
+  inputID = "session_manage",
+  title = "Active session",
+  status = "primary",
+  closable = FALSE,
+  collapsible = FALSE,
+  width = 6,
+  pickerInput(
+    inputId = "session_choose",
+    label = NULL,
+    choices = c("main", "other"),
+    selected = "main",
+    multiple = FALSE
+  ),
+  actionBttn(
+    inputId = "session_delete",
+    label = "Delete active session",
+    style = "simple",
+    color = "primary",
+    size = "sm",
+    block = FALSE,
+    no_outline = TRUE
   )
 )
 
@@ -52,10 +53,10 @@ card_models <- bs4Card(
   status = "primary",
   closable = FALSE,
   collapsible = FALSE,
-  width = 4,
+  width = 6,
   pickerInput(
     inputId = "biomarkers",
-    label = NULL,
+    label = "Biomarkers",
     choices = c("albumin", "log_bilirubin", "log_platelet"),
     selected = c("albumin", "log_bilirubin"),
     multiple = TRUE,
@@ -84,7 +85,7 @@ card_run <- bs4Card(
   status = "primary",
   closable = FALSE,
   collapsible = FALSE,
-  width = 4,
+  width = 6,
   actionBttn(
     inputId = "run_start",
     label = "Run pipeline",
@@ -110,7 +111,8 @@ card_run <- bs4Card(
 tab_control <- bs4TabItem(
   "control",
   fluidRow(
-    card_sessions
+    card_session_manage,
+    card_session_create
   ),
   fluidRow(
     card_run,
