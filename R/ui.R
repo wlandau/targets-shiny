@@ -4,7 +4,8 @@ source("R/ui_results.R")
 
 tabs <- bs4TabItems(
   tab_control,
-  tab_progress
+  tab_progress,
+  tab_results
 )
 
 menu <- bs4SidebarMenu(
