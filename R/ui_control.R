@@ -27,13 +27,7 @@ card_session_manage <- bs4Card(
   status = "primary",
   solidHeader = TRUE,
   width = 12,
-  pickerInput(
-    inputId = "session_choose",
-    label = NULL,
-    choices = c("main", "other"),
-    selected = "main",
-    multiple = FALSE
-  ),
+  uiOutput("session_choose"),
   actionBttn(
     inputId = "session_delete",
     label = "Delete active session",
