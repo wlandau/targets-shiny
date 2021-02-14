@@ -2,6 +2,7 @@ card_session_create <- bs4Card(
   inputID = "session_create",
   title = "New session",
   status = "primary",
+  solidHeader = TRUE,
   width = 12,
   textInput(
     inputId = "session_new",
@@ -24,6 +25,7 @@ card_session_manage <- bs4Card(
   inputID = "session_manage",
   title = "Active session",
   status = "primary",
+  solidHeader = TRUE,
   width = 12,
   pickerInput(
     inputId = "session_choose",
@@ -47,6 +49,7 @@ card_models <- bs4Card(
   inputID = "models",
   title = "Models",
   status = "primary",
+  solidHeader = TRUE,
   width = 12,
   pickerInput(
     inputId = "biomarkers",
@@ -77,6 +80,7 @@ card_run <- bs4Card(
   inputID = "run",
   title = "Run",
   status = "primary",
+  solidHeader = TRUE,
   width = 12,
   actionBttn(
     inputId = "run_start",
