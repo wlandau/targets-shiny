@@ -1,3 +1,4 @@
+library(dplyr)
 library(targets)
 library(tarchetypes)
 library(tidyr)
@@ -8,44 +9,40 @@ tar_option_set(
   garbage_collection = "true"
 )
 
-fit_model <- function(hazard, regularization, iterations) {
+preprocess_data_long <- function() {
+  pbcLong %>%
+    rename(log_bilirubin = logBili) %>%
+    mutate(log_platelet = log(platelet))
+}
+
+fit_model <- function(data_long, biomarker, iterations) {
   model <- stan_jm(
-    formulaLong = logBili ~ year + (1 | id),
+    formulaLong = as.formula(paste(biomarker, "~ year + (1 | id)")),
     formulaEvent = Surv(futimeYears, death) ~ sex + trt,
     time_var = "year",
-    dataLong = pbcLong,
+    dataLong = data_long,
     dataEvent = pbcSurv,
-    prior_covariance = lkj(regularization = regularization, autoscale = TRUE),
-    basehaz = hazard,
-    iter = iterations,
-    chains = 4,
-    cores = 1
+    iter = iterations
   )
   tibble(
     alpha = as.data.frame(model)[["Assoc|Long1|etavalue"]],
-    hazard = hazard,
-    regularization = regularization
+    biomarker = biomarker
   )
 }
 
 plot_samples <- function(samples) {
   ggplot(samples) +
-    geom_density(aes(x = alpha), fill = "#606060", alpha = 0.5) +
-    facet_grid(hazard ~ regularization, labeller = label_both) +
-    theme_gray(12)
+    geom_density(aes(x = alpha, fill = biomarker), alpha = 0.5) +
+    theme_gray(16)
 }
 
-values <- expand_grid(
-  hazard = c("bs", "weibull", "piecewise"),
-  regularization = c(0.5, 1, 2)
-)
-
 models <- tar_map(
-  values = values,
-  tar_fst_tbl(model, fit_model(hazard, regularization, 1000))
+  values = list(biomarker = c("albumin", "log_bilirubin", "log_platelet")),
+  tar_fst_tbl(model, fit_model(data_long, biomarker, 1000))
 )
 
 list(
+  tar_target(data_long, preprocess_data_long()),
   models,
   tar_combine(samples, models),
   tar_qs(plot, plot_samples(samples))
