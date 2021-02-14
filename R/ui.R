@@ -4,40 +4,55 @@ card_sessions <- bs4Card(
   status = "primary",
   closable = FALSE,
   collapsible = FALSE,
-  width = 6,
-  actionBttn(
-    inputId = "session_create",
-    label = "Create new session",
-    style = "simple",
-    color = "primary",
-    size = "sm",
-    block = FALSE,
-    no_outline = TRUE
-  ),
-  br(),
-  br(),
-  textInput(
-    inputId = "session_new",
-    label = NULL,
-    value = NULL,
-    placeholder = "session_name"
-  ),
-  pickerInput(
-    inputId = "session_choose",
-    label = "Choose session",
-    choices = c("main", "other"),
-    selected = "main",
-    multiple = FALSE
+  width = 8,
+  fluidRow(
+    column(
+      6,
+      textInput(
+        inputId = "session_new",
+        label = "New session",
+        value = NULL,
+        placeholder = "new_session_name"
+      ),
+      actionBttn(
+        inputId = "session_create",
+        label = "Create new session",
+        style = "simple",
+        color = "primary",
+        size = "sm",
+        block = FALSE,
+        no_outline = TRUE
+      )
+    ),
+    column(
+      6,
+      pickerInput(
+        inputId = "session_choose",
+        label = "Choose active session",
+        choices = c("main", "other"),
+        selected = "main",
+        multiple = FALSE
+      ),
+      actionBttn(
+        inputId = "session_delete",
+        label = "Delete current session",
+        style = "simple",
+        color = "primary",
+        size = "sm",
+        block = FALSE,
+        no_outline = TRUE
+      )
+    )
   )
 )
 
 card_models <- bs4Card(
-  inputID = "control",
-  title = "Control",
+  inputID = "models",
+  title = "Models",
   status = "primary",
   closable = FALSE,
   collapsible = FALSE,
-  width = 6,
+  width = 4,
   pickerInput(
     inputId = "biomarkers",
     label = NULL,
@@ -50,13 +65,55 @@ card_models <- bs4Card(
       selectAllText = "all",
       noneSelectedText = "no label"
     )
+  ),
+  shinyWidgets::chooseSliderSkin("Flat", color = "blue"),
+  shiny::sliderInput(
+    inputId = "iterations",
+    label = "Iterations",
+    value = 1000,
+    min = 100,
+    max = 10000,
+    step = 100,
+    ticks = FALSE
+  )
+)
+
+card_run <- bs4Card(
+  inputID = "run",
+  title = "Run",
+  status = "primary",
+  closable = FALSE,
+  collapsible = FALSE,
+  width = 4,
+  actionBttn(
+    inputId = "run_start",
+    label = "Run pipeline",
+    style = "simple",
+    color = "success",
+    size = "sm",
+    block = FALSE,
+    no_outline = TRUE
+  ),
+  br(),
+  br(),
+  actionBttn(
+    inputId = "run_cancel",
+    label = "Cancel pipeline",
+    style = "simple",
+    color = "danger",
+    size = "sm",
+    block = FALSE,
+    no_outline = TRUE
   )
 )
 
 tab_control <- bs4TabItem(
   "control",
-  bs4Sortable(
-    card_sessions,
+  fluidRow(
+    card_sessions
+  ),
+  fluidRow(
+    card_run,
     card_models
   )
 )
