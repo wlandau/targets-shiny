@@ -1,18 +1,26 @@
-project_path <- function(name = "", ...) {
-  file.path(R_user_dir("targets-shiny", "cache"), name, ...)
+project_parent <- function() {
+  R_user_dir("targets-shiny", "cache")
+}
+
+project_path <- function(name, ...) {
+  file.path(project_parent(), name, ...)
 }
 
 project_list <- function() {
-  list.dirs(project_path(), full.names = FALSE, recursive = FALSE)
+  list.dirs(project_parent(), full.names = FALSE, recursive = FALSE)
 }
 
-project_head <- function(name) {
+project_head <- function() {
   head(project_list(), 1)
 }
 
 project_get <- function() {
   path <- project_path("_project")
   if (file.exists(path)) readLines(project_path("_project"))
+}
+
+project_undefined <- function() {
+  !any(nzchar(project_get()))
 }
 
 project_set <- function(name) {
@@ -34,18 +42,17 @@ project_delete <- function(name) {
   dir_delete(project_path(name))
 }
 
-
-
-###
-
-project_save <- function(name, biomarkers, iterations) {
-  path <- project_path(name, "settings.rds")
+project_save <- function(biomarkers, iterations) {
+  if (project_undefined()) return()
+  path <- project_path(project_get(), "settings.rds")
   settings <- list(biomarkers = biomarkers, iterations = iterations)
   saveRDS(settings, path)
 }
 
 project_load <- function() {
-  name <- project_get()
-  
+  if (project_undefined()) return()
+  session <- getDefaultReactiveDomain()
+  settings <- readRDS(project_path(project_get(), "settings.rds"))
+  updatePickerInput(session, "biomarkers", selected = settings$biomarkers)
+  updateSliderInput(session, "iterations", value = settings$iterations)
 }
-
