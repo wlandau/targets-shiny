@@ -20,7 +20,7 @@ menu <- bs4SidebarMenu(
 
 ui <- bs4DashPage(
   title = "app",
-  body = bs4DashBody(tabs),
+  body = bs4DashBody(useShinyalert(), useShinyjs(), tabs),
   header = bs4DashNavbar(controlbarIcon = NULL),
   sidebar = bs4DashSidebar(skin = "light", inputId = "sidebar", menu),
   dark = FALSE
