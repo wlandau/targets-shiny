@@ -2,7 +2,7 @@ process_run <- function() {
   if (project_undefined()) return()
   if (process_running()) return()
   log <- project_path(project_get(), "log.txt")
-  args <- list(supervise = TRUE, stdout = log, stderr = log)
+  args <- list(supervise = FALSE, stdout = log, stderr = log)
   px <- tar_make(callr_function = r_bg, callr_arguments = args)
   while(process_not_done(px) && !tar_exist_process()) Sys.sleep(0.05)
   while(process_not_done(px) && !process_agrees(px)) Sys.sleep(0.05)
