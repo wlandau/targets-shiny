@@ -1,23 +1,27 @@
 server <- function(input, output, session) {
-  session_active_restore()
-  sessions <- reactiveValues(
-    active = session_active_get(),
-    choices = session_list()
+  projects <- reactiveValues(
+    active = project_get(),
+    choices = project_list()
   )
-  output$session_active <- renderUI(
+  output$project_active <- renderUI(
     pickerInput(
-      inputId = "session_active",
+      inputId = "project_active",
       label = NULL,
-      choices = sessions$choices,
-      selected = sessions$active,
+      choices = projects$choices,
+      selected = projects$active,
       multiple = FALSE
     )
   )
   observe({
-    sessions$active <- input$session_active
+    req(input$project_active)
+    projects$active <- input$project_active
+    project_set(projects$active)
   })
-  observeEvent(input$session_create, {
-    session_create(input$session_new)
-    sessions$choices <- session_list()
+  observeEvent(input$project_create, {
+    req(input$project_new)
+    project_create(input$project_new)
+    projects$active <- input$project_new
+    projects$choices <- project_list()
+    project_set(input$project_new)
   })
 }

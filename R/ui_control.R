@@ -1,18 +1,18 @@
-card_session_create <- bs4Card(
-  inputID = "session_create",
-  title = "New session",
+card_project_create <- bs4Card(
+  inputID = "project_create",
+  title = "New project",
   status = "primary",
   solidHeader = TRUE,
   width = 12,
   textInput(
-    inputId = "session_new",
+    inputId = "project_new",
     label = NULL,
     value = NULL,
-    placeholder = "new_session_name"
+    placeholder = "new_project_name"
   ),
   actionBttn(
-    inputId = "session_create",
-    label = "Create new session",
+    inputId = "project_create",
+    label = "Create new project",
     style = "simple",
     color = "primary",
     size = "sm",
@@ -21,16 +21,16 @@ card_session_create <- bs4Card(
   )
 )
 
-card_session_manage <- bs4Card(
-  inputID = "session_manage",
-  title = "Active session",
+card_project_manage <- bs4Card(
+  inputID = "project_manage",
+  title = "Active project",
   status = "primary",
   solidHeader = TRUE,
   width = 12,
-  uiOutput("session_active"),
+  uiOutput("project_active"),
   actionBttn(
-    inputId = "session_delete",
-    label = "Delete active session",
+    inputId = "project_delete",
+    label = "Delete active project",
     style = "simple",
     color = "primary",
     size = "sm",
@@ -101,7 +101,7 @@ card_run <- bs4Card(
 tab_control <- bs4TabItem(
   "control",
   fluidRow(
-    column(6, card_session_manage, card_session_create),
+    column(6, card_project_manage, card_project_create),
     column(6, card_run, card_models)
   )
 )

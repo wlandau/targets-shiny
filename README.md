@@ -8,7 +8,7 @@ The [`targets`](https://docs.ropensci.org/targets/) R package orchestrates tasks
 
 ## Shiny
 
-This Shiny app contains a [`targets`](https://docs.ropensci.org/targets/) pipeline to run Bayesian joint models with [`rstanarm`](https://mc-stan.org/rstanarm/) ([Brilleman 2017](https://cran.r-project.org/web/packages/rstanarm/vignettes/jm.html)). This app can manage multiple sessions with [persistent storage](https://blog.r-hub.io/2020/03/12/user-preferences/) and persistently running [`targets`](https://docs.ropensci.org/targets/) pipelines, and users can recover their sessions after logging out.
+This Shiny app contains a [`targets`](https://docs.ropensci.org/targets/) pipeline to run Bayesian joint models with [`rstanarm`](https://mc-stan.org/rstanarm/) ([Brilleman 2017](https://cran.r-project.org/web/packages/rstanarm/vignettes/jm.html)). This app can manage multiple projects with [persistent storage](https://blog.r-hub.io/2020/03/12/user-preferences/), and users can recover their projects and running [`targets`](https://docs.ropensci.org/targets/) pipelines after logging out and logging back in again.
 
 ## Administration
 
@@ -21,9 +21,9 @@ This Shiny app contains a [`targets`](https://docs.ropensci.org/targets/) pipeli
 
 The app fits Bayesian joint models to the publicly available [`pbcLong`](https://mc-stan.org/rstanarm/reference/rstanarm-datasets.html) and [`pbcSurv`](https://mc-stan.org/rstanarm/reference/rstanarm-datasets.html) datasets in the [`rstanarm`](https://mc-stan.org/rstanarm/) package. The survival endpoint is time until death, and the longitudinal endpoint is the the biomarker of your choice. The app fits one [univariate joint model](https://mc-stan.org/rstanarm/articles/jm.html#univariate-joint-model-current-value-association-structure) for each biomarker you select. Adjust the number of MCMC iterations using the slider.
 
-#### Sessions
+#### Projects
 
-You can save a new versions of the pipeline by creating a new session. These sessions run independently and save storage to different locations.
+You can save a new versions of the pipeline by creating a new project. These projects run independently and save storage to different locations.
 
 #### Runs
 
@@ -31,7 +31,7 @@ When you are ready, click the "Run pipeline" button to run the models. Watch pro
 
 #### Persistence
 
-As long as the app is administered properly, you can safely log out and log back in. Any running pipelines will still be running, and data from all your sessions will still be available.
+As long as the app is administered properly, you can safely log out and log back in. Any running pipelines will still be running, and data from all your projects will still be available.
 
 ## References
 
