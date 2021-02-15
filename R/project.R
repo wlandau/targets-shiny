@@ -47,6 +47,8 @@ project_save <- function(biomarkers, iterations) {
   path <- project_path(project_get(), "settings.rds")
   settings <- list(biomarkers = biomarkers, iterations = iterations)
   saveRDS(settings, path)
+  write_functions(path)
+  write_pipeine(path, biomarkers, iterations)
 }
 
 project_load <- function() {

@@ -1,4 +1,6 @@
 source("R/packages.R")
 source("R/ui.R")
 source("R/server.R")
+source("R/project.R")
+source("R/pipeline.R")
 shinyApp(ui = ui, server = server)
