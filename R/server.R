@@ -1,29 +1,22 @@
 server <- function(input, output, session) {
-  projects <- reactiveValues(
-    active = project_get(),
+  updatePickerInput(
+    session = session,
+    inputId = "project",
+    selected = project_get(),
     choices = project_list()
   )
-  output$project_active <- renderUI({
-    browser()
-    pickerInput(
-      inputId = "project_active",
-      label = NULL,
-      selected = projects$active,
-      choices = projects$choices,
-      multiple = FALSE
+  observeEvent(input$project_create, {
+    project_create(input$project_new)
+    project_set(input$project_new)
+    updatePickerInput(
+      session = session,
+      inputId = "project",
+      selected = input$project_new,
+      choices = project_list()
     )
   })
   observe({
-    req(input$project_active)
-    browser()
-    projects$active <- input$project_active
-    project_set(projects$active)
-  })
-  observeEvent(input$project_create, {
-    req(input$project_new)
-    project_create(input$project_new)
-    projects$choices <- project_list()
-    projects$active <- input$project_new
-    project_set(projects$active)
+    req(input$project)
+    project_set(input$project)
   })
 }

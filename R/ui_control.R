@@ -1,4 +1,4 @@
-card_project_create <- bs4Card(
+card_create <- bs4Card(
   inputID = "project_create",
   title = "New project",
   status = "primary",
@@ -21,16 +21,22 @@ card_project_create <- bs4Card(
   )
 )
 
-card_project_manage <- bs4Card(
-  inputID = "project_manage",
-  title = "Active project",
+card_select <- bs4Card(
+  inputID = "project",
+  title = "Selected project",
   status = "primary",
   solidHeader = TRUE,
   width = 12,
-  uiOutput("project_active"),
+  pickerInput(
+    inputId = "project",
+    label = NULL,
+    selected = character(0),
+    choices = character(0),
+    multiple = FALSE
+  ),
   actionBttn(
     inputId = "project_delete",
-    label = "Delete active project",
+    label = "Delete selected project",
     style = "simple",
     color = "primary",
     size = "sm",
@@ -101,7 +107,7 @@ card_run <- bs4Card(
 tab_control <- bs4TabItem(
   "control",
   fluidRow(
-    column(6, card_project_manage, card_project_create),
+    column(6, card_select, card_create),
     column(6, card_run, card_models)
   )
 )
