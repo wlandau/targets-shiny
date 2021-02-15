@@ -34,7 +34,7 @@ project_select <- function(name = project_get(), choices = project_list()) {
 
 project_create <- function(name) {
   name <- trimws(name)
-  valid <- nzchar(name) && !(name %in% project_list())
+  valid <- nzchar(name) && !(name %in% c("_project", project_list()))
   if (valid) dir_create(project_path(name))
 }
 
@@ -44,11 +44,12 @@ project_delete <- function(name) {
 
 project_save <- function(biomarkers, iterations) {
   if (project_undefined()) return()
-  path <- project_path(project_get(), "settings.rds")
+  name <- project_get()
+  path <- project_path(name, "settings.rds")
   settings <- list(biomarkers = biomarkers, iterations = iterations)
   saveRDS(settings, path)
-  write_functions(path)
-  write_pipeine(path, biomarkers, iterations)
+  write_functions(project_path(name))
+  write_pipeline(project_path(name), biomarkers, iterations)
 }
 
 project_load <- function() {
