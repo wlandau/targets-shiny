@@ -3,13 +3,12 @@ project_path <- function(name = "", ...) {
 }
 
 project_set <- function(name) {
-  writeLines(name, project_path("_project"))
+  writeLines(as.character(name), project_path("_project"))
 }
 
 project_get <- function() {
-  if (file.exists(project_path("_project"))) {
-    readLines(project_path("_project"))
-  }
+  path <- project_path("_project")
+  if (file.exists(path)) readLines(project_path("_project"))
 }
 
 project_list <- function() {
@@ -18,39 +17,20 @@ project_list <- function() {
 
 project_create <- function(name) {
   name <- trimws(name)
-  if (project_valid(name)) {
-    dir_create(project_path(name))
-  }
+  valid <- nzchar(name) && !(name %in% project_list())
+  if (valid) dir_create(project_path(name))
 }
 
-project_valid <- function(name) {
-  out <- FALSE
-  if (!nzchar(name)) {
-    shinyalert("Error", "Please type a project name.")
-  } else if (identical(name, "_project")) {
-    shinyalert("Error", "project name cannot be _project.")
-  } else if (name %in% project_list()) {
-    shinyalert("Error", paste("project", name, "already exists."))
-  } else {
-    out <- TRUE
-  }
-  out
+project_delete <- function(name) {
+  dir_delete(project_path(name))
 }
 
 project_ui <- function(selected = project_get(), choices = project_list()) {
-  updatePickerInput(
-    session = getDefaultReactiveDomain(),
-    inputId = "project",
-    selected = selected,
-    choices = choices
-  )
+  session <- getDefaultReactiveDomain()
+  updatePickerInput(session, "project", NULL, selected, choices)
 }
 
-project_clear <- function() {
-  unlink(list.files(project_path(), full.names = TRUE), recursive = TRUE)
-}
-
-
-project_exists <- function(name) {
-  any(file.exists(project_path(name)))
+project_select <- function(name = head(project_list(), 1)) {
+  project_set(name)
+  project_ui(name)
 }

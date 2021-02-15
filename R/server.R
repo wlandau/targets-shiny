@@ -6,8 +6,10 @@ server <- function(input, output, session) {
   })
   observeEvent(input$project_create, {
     project_create(input$project_new)
-    project_set(input$project_new)
-    project_ui(input$project_new)
+    project_select(input$project_new)
   })
-
+  observeEvent(input$project_delete, {
+    project_delete(input$project)
+    project_select()
+  })
 }
