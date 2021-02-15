@@ -4,8 +4,8 @@ process_run <- function() {
   log <- project_path(project_get(), "log.txt")
   args <- list(supervise = TRUE, stdout = log, stderr = log)
   px <- tar_make(callr_function = r_bg, callr_arguments = args)
-  while(!tar_exist_process()) Sys.sleep(0.05)
-  while(!identical(px$get_pid(), tar_pid())) Sys.sleep(0.05)
+  while(px$is_alive() && !tar_exist_process()) Sys.sleep(0.05)
+  while(px$is_alive() && !identical(px$get_pid(), tar_pid())) Sys.sleep(0.05)
 }
 
 process_cancel <- function() {
