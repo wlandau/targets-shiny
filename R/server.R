@@ -1,5 +1,5 @@
 server <- function(input, output, session) {
-  project_ui()
+  project_select()
   observe({
     req(input$project)
     project_set(input$project)
@@ -10,6 +10,6 @@ server <- function(input, output, session) {
   })
   observeEvent(input$project_delete, {
     project_delete(input$project)
-    project_select()
+    project_select(project_head())
   })
 }
