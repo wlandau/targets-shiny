@@ -26,6 +26,6 @@ server <- function(input, output, session) {
     input$run_start,
     tar_make(callr_function = r_bg, callr_arguments = list(supervise = TRUE))
   )
-  observeEvent(input$run_cancel, ps_kill(tar_pid()))
+  observeEvent(input$run_cancel, ps_kill(ps_handle(tar_pid())))
   output$plot <- renderPlot(tar_read(plot))
 }
