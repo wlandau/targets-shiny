@@ -7,9 +7,9 @@ server <- function(input, output, session) {
     project_load()
   })
   observe({
-    req(input$biomarker)
+    req(input$biomarkers)
     req(input$iterations)
-    project_save(input$biomarker, input$iterations)
+    project_save(input$biomarkers, input$iterations)
   })
   observeEvent(input$project_create, {
     project_create(input$project_new)
