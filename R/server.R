@@ -1,6 +1,7 @@
 server <- function(input, output, session) {
   project_select()
   project_load()
+  tar_watch_server("targets-shiny")
   observe({
     req(input$project)
     project_set(input$project)

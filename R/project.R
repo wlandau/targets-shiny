@@ -25,6 +25,7 @@ project_undefined <- function() {
 
 project_set <- function(name) {
   writeLines(as.character(name), project_path("_project"))
+  setwd(project_path(name))
 }
 
 project_select <- function(name = project_get(), choices = project_list()) {
