@@ -6,6 +6,10 @@ project_list <- function() {
   list.dirs(project_path(), full.names = FALSE, recursive = FALSE)
 }
 
+project_head <- function(name) {
+  head(project_list(), 1)
+}
+
 project_get <- function() {
   path <- project_path("_project")
   if (file.exists(path)) readLines(project_path("_project"))
@@ -30,9 +34,7 @@ project_delete <- function(name) {
   dir_delete(project_path(name))
 }
 
-project_head <- function(name) {
-  head(project_list(), 1)
-}
+
 
 ###
 
