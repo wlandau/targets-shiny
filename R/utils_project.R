@@ -40,8 +40,14 @@ project_valid <- function(name) {
   out
 }
 
-
-
+project_ui <- function(selected = project_get(), choices = project_list()) {
+  updatePickerInput(
+    session = getDefaultReactiveDomain(),
+    inputId = "project",
+    selected = selected,
+    choices = choices
+  )
+}
 
 project_clear <- function() {
   unlink(list.files(project_path(), full.names = TRUE), recursive = TRUE)
