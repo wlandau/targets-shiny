@@ -9,8 +9,6 @@ project_set <- function(name) {
 project_get <- function() {
   if (file.exists(project_path("_project"))) {
     readLines(project_path("_project"))
-  } else {
-    character(0)
   }
 }
 
@@ -20,10 +18,9 @@ project_list <- function() {
 
 project_create <- function(name) {
   name <- trimws(name)
-  if (!project_valid(name)) {
-    return()
+  if (project_valid(name)) {
+    dir_create(project_path(name))
   }
-  dir_create(project_path(name))
 }
 
 project_valid <- function(name) {
