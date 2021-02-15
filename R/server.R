@@ -22,4 +22,10 @@ server <- function(input, output, session) {
     project_delete(input$project)
     project_select(project_head())
   })
+  observeEvent(
+    input$run_start,
+    tar_make(callr_function = r_bg, callr_arguments = list(supervise = TRUE))
+  )
+  observeEvent(input$run_cancel, ps_kill(tar_pid()))
+  output$plot <- renderPlot(tar_read(plot))
 }
