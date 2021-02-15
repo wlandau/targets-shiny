@@ -17,10 +17,6 @@ server <- function(input, output, session) {
     project_set(input$project)
     project_load()
   })
-  # observe({
-  #   invalidateLater(millis = 100)
-  #   process_button()
-  # })
   observeEvent(input$project_create, {
     project_create(input$project_new)
     project_select(input$project_new)
@@ -32,6 +28,6 @@ server <- function(input, output, session) {
     project_select(project_head())
   })
   observeEvent(input$run_start, process_run())
-#  observeEvent(input$run_cancel, process_cancel())
-  output$plot <- renderPlot(tar_read(plot))
+  observeEvent(input$run_cancel, process_cancel())
+  output$plot <- renderPlot(if (tar_exist_objects("plot")) tar_read(plot))
 }

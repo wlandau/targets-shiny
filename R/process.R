@@ -15,4 +15,3 @@ process_cancel <- function() {
 process_running <- function() {
   tar_exist_process() && (tar_pid() %in% ps_pids())
 }
-
