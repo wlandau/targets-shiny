@@ -2,13 +2,13 @@ project_path <- function(name = "", ...) {
   file.path(R_user_dir("targets-shiny", "cache"), name, ...)
 }
 
+project_list <- function() {
+  list.dirs(project_path(), full.names = FALSE, recursive = FALSE)
+}
+
 project_get <- function() {
   path <- project_path("_project")
   if (file.exists(path)) readLines(project_path("_project"))
-}
-
-project_list <- function() {
-  list.dirs(project_path(), full.names = FALSE, recursive = FALSE)
 }
 
 project_set <- function(name) {
