@@ -29,17 +29,16 @@ project_create <- function(name) {
 project_valid <- function(name) {
   out <- FALSE
   if (!nzchar(name)) {
-    shinyalert(title = "Error", "Please type a project name.")
+    project_error("Error", "Please type a project name.")
   } else if (identical(name, "_project")) {
-    shinyalert(title = "Error", "project name cannot be _project.")
+    project_error("Error", "project name cannot be _project.")
   } else if (name %in% project_list()) {
-    shinyalert(title = "Error", paste("project", name, "already exists."))
+    project_error("Error", paste("project", name, "already exists."))
   } else {
     out <- TRUE
   }
   out
 }
-
 
 
 
