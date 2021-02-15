@@ -12,8 +12,9 @@ This Shiny app contains a [`targets`](https://docs.ropensci.org/targets/) pipeli
 
 ## Administration
 
-1. Deploy the app to [RStudio Server](https://rstudio.com/products/rstudio-server-pro/), [RStudio Connect](https://rstudio.com/products/connect/), or other service that supports persistent server-side storage.
-2. Run the app as the logged-in user, not the system administrator.
+1. If applicable, change the `project_parent()` function in `R/project.R` to a user-specific storage path appropriate to your infrastructure.
+2. Deploy the app to [RStudio Server](https://rstudio.com/products/rstudio-server-pro/), [RStudio Connect](https://rstudio.com/products/connect/), or other service that supports persistent server-side storage.
+3. Run the app as the logged-in user, not the system administrator.
 
 ## Usage
 
