@@ -45,9 +45,8 @@ project_delete <- function(name) {
 project_save <- function(biomarkers, iterations) {
   if (project_undefined()) return()
   name <- project_get()
-  path <- project_path(name, "settings.rds")
   settings <- list(biomarkers = biomarkers, iterations = iterations)
-  saveRDS(settings, path)
+  saveRDS(settings, project_path(name, "settings.rds"))
   write_functions(project_path(name))
   write_pipeline(project_path(name), biomarkers, iterations)
 }
