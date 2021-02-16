@@ -33,8 +33,8 @@ server <- function(input, output, session) {
   })
   observeEvent(input$run_start, process_run())
   observeEvent(input$run_cancel, process_cancel())
-  output$plot <- renderCachedPlot({
-    invalidateLater(millis = 100)
+  output$plot <- renderPlot({
+    invalidateLater(millis = 1000)
     results_plot()
-  }, results_hash())
+  })
 }
