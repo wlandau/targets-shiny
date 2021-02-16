@@ -17,6 +17,10 @@ server <- function(input, output, session) {
     project_set(input$project)
     project_load()
   })
+ # observe({
+#    invalidateLater(millis = 10)
+#    process_spinner()
+#  })
   observeEvent(input$project_create, {
     project_create(input$project_new)
     project_select(input$project_new)

@@ -23,7 +23,7 @@ card_create <- bs4Card(
 
 card_select <- bs4Card(
   inputID = "project",
-  title = "Selected project",
+  title = "Select project",
   status = "primary",
   solidHeader = TRUE,
   width = 12,
