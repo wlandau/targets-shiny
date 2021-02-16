@@ -47,10 +47,10 @@ server <- function(input, output, session) {
   })
   output$stdout <- renderText({
     if (process$running) invalidateLater(100)
-    paste0(readLines(project_stdout()), collapse = "\n")
+    log_text(project_stdout())
   })
   output$stderr <- renderText({
     if (process$running) invalidateLater(100)
-    paste0(readLines(project_stderr()), collapse = "\n")
+    log_text(project_stderr())
   })
 }

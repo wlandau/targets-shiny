@@ -4,7 +4,8 @@ card_stdout <- bs4Card(
   status = "primary",
   solidHeader = TRUE,
   width = 6,
-  verbatimTextOutput("stdout")
+  textOutput("stdout"),
+  tags$head(tags$style("#stdout {white-space: pre-wrap; overflow-y:scroll; max-height: 600px;}"))
 )
 
 card_stderr <- bs4Card(
@@ -13,7 +14,8 @@ card_stderr <- bs4Card(
   status = "primary",
   solidHeader = TRUE,
   width = 6,
-  verbatimTextOutput("stderr")
+  textOutput("stderr"),
+  tags$head(tags$style("#stderr {white-space: pre-wrap; overflow-y:scroll; max-height: 600px;}"))
 )
 
 tab_logs <- bs4TabItem("logs", fluidRow(card_stdout, card_stderr))
