@@ -6,12 +6,13 @@ server <- function(input, output, session) {
   # Simple on.exit() will not work.
   dir <- getwd()
   session$onSessionEnded(function() setwd(dir))
-  # Load the project the user last opened.
-  # This means reading the user's _project file
-  # to identify the project, setting the working
-  # directory there, and loading the settings.
-  project_select()
+  # Load the saved settings of the project into the biomarker
+  # dropdown and iterations slider. This is important to do
+  # before project_select() because of the reactivity loop.
   project_load()
+  # Identify the set project in the _project file
+  # and populate the dropdown menu.
+  project_select()
   # The tar_watch() module powers the "Progress" tab.
   # This is the server-side component.
   tar_watch_server("targets-shiny")
@@ -31,7 +32,7 @@ server <- function(input, output, session) {
     process_spinner()
   })
   # Every time the user selects a project in the drop-down menu
-  # of the "Control" tab, switch to that project.
+  # of the "Control" tab, switch to that project and load the settings.
   observe({
     req(input$project)
     project_set(input$project)
