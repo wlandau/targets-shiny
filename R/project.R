@@ -6,7 +6,12 @@
 # or other infrastructure that runs the app as the logged-in user
 # and allows persistent user-side storage. shinyapps.io is not sufficient.
 project_home <- function() {
-  R_user_dir("targets-shiny", "cache") # Must be an absolute/full path.
+  home <- Sys.getenv("TARGETS_SHINY_HOME")
+  if (identical(home, "")) {
+    R_user_dir("targets-shiny", "cache")
+  } else {
+    file.path(home, Sys.getenv("USER"))
+  }
 }
 
 # Identify the absolute file path of any file in a project

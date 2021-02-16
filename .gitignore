@@ -15,5 +15,6 @@ vignettes/*.pdf
 /cache/
 *.utf8.md
 *.knit.md
+.Renviron
 deploy.R
 rsconnect
