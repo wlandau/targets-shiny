@@ -27,6 +27,7 @@ server <- function(input, output, session) {
     process_spinner()
   })
   observeEvent(input$project_create, {
+    req(input$project_new)
     project_create(input$project_new)
     project_select(input$project_new)
     project_set(input$project_new)

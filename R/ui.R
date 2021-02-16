@@ -1,20 +1,23 @@
-source("R/ui_about.R")
 source("R/ui_control.R")
-source("R/ui_progress.R")
 source("R/ui_results.R")
+source("R/ui_progress.R")
+source("R/ui_logs.R")
+source("R/ui_about.R")
 
 tabs <- bs4TabItems(
-  tab_about,
   tab_control,
+  tab_results,
   tab_progress,
-  tab_results
+  tab_logs,
+  tab_about
 )
 
 menu <- bs4SidebarMenu(
   id = "menu",
   bs4SidebarMenuItem("Control", tabName = "control", icon = icon("cog")),
-  bs4SidebarMenuItem("Progress", tabName = "progress", icon = icon("spinner")),
   bs4SidebarMenuItem("Results", tabName = "results", icon = icon("chart-area")),
+  bs4SidebarMenuItem("Progress", tabName = "progress", icon = icon("spinner")),
+  bs4SidebarMenuItem("Logs", tabName = "logs", icon = icon("file")),
   bs4SidebarMenuItem("About", tabName = "about", icon = icon("info"))
 )
 

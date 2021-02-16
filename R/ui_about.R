@@ -7,7 +7,4 @@ card_about <- bs4Card(
   includeMarkdown("README.md")
 )
 
-tab_about <- bs4TabItem(
-  "about",
-  card_about
-)
+tab_about <- bs4TabItem("about", card_about)
