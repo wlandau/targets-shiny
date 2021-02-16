@@ -34,6 +34,10 @@ When you are ready, click the "Run pipeline" button to run the models. Watch pro
 
 As long as the app is administered properly, you can safely log out and log back in. Any running pipelines will still be running, and data from all your projects will still be available.
 
+## Thanks
+
+For years, [Eric Nantz](https://shinydevseries.com/authors/admin/) has advanced the space of enterprise Shiny apps in the life sciences. The motivation for this app comes from his work, and it borrows many of his techniques.
+
 ## References
 
 1. Brilleman S. "Estimating Joint Models for Longitudinal and Time-to-Event Data with rstanarm." `rstanarm`, Stan Development Team, 2020. <https://cran.r-project.org/web/packages/rstanarm/vignettes/jm.html>

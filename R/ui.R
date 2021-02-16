@@ -22,9 +22,8 @@ menu <- bs4SidebarMenu(
 )
 
 ui <- bs4DashPage(
-  title = "app",
   body = bs4DashBody(use_busy_spinner(spin = "cube-grid"), tabs),
-  header = bs4DashNavbar(controlbarIcon = NULL),
+  header = bs4DashNavbar(title = "targets-shiny", controlbarIcon = NULL),
   sidebar = bs4DashSidebar(skin = "light", inputId = "sidebar", menu),
   dark = FALSE
 )
