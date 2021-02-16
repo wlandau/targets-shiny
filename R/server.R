@@ -18,8 +18,7 @@ server <- function(input, output, session) {
     project_load()
   })
   observe({
-    invalidateLater(millis = 1000)
-    print(process_running())
+    invalidateLater(millis = 10)
     process_spinner()
   })
   observeEvent(input$project_create, {
@@ -34,5 +33,5 @@ server <- function(input, output, session) {
   })
   observeEvent(input$run_start, process_run())
   observeEvent(input$run_cancel, process_cancel())
-  output$plot <- renderPlot(if (tar_exist_objects("plot")) tar_read(plot))
+  output$plot <- renderPlot(results_plot())
 }
