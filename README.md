@@ -37,7 +37,7 @@ As long as the app is administered properly, you can safely log out and log back
 
 ## Thanks
 
-For years, [Eric Nantz](https://shinydevseries.com/authors/admin/) has advanced the space of enterprise Shiny apps in the life sciences. The motivation for this app comes from his work, and it borrows many of his techniques.
+For years, [Eric Nantz](https://shinydevseries.com/authors/admin/) has advanced the space of enterprise Shiny in the life sciences. The motivation for this app comes from his work, and it borrows many of his techniques.
 
 ## References
 
