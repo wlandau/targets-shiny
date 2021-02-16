@@ -1,3 +1,4 @@
+library(bayesplot)
 library(bs4Dash)
 library(callr)
 library(dplyr)
