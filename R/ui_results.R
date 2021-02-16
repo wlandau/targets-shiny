@@ -13,7 +13,7 @@ card_association <- bs4Card(
   status = "success",
   solidHeader = TRUE,
   width = 8,
-  plotOutput("plot")
+  withSpinner(plotOutput("plot"))
 )
 
 tab_results <- bs4TabItem(
