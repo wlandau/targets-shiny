@@ -1,18 +1,21 @@
-# All the projects live in project_parent(). tools::R_user_dir()
+# All the projects live in project_home(). tools::R_user_dir()
 # provides unobtrusive persistent user-specific storage for packages
 # and apps. If you are the administrator and need to change where
 # persistent user files are stored, this is the place to do so.
 # This app must be deployed to RStudio Server, RStudio Connect,
 # or other infrastructure that runs the app as the logged-in user
 # and allows persistent user-side storage. shinyapps.io is not sufficient.
-project_parent <- function() {
-  R_user_dir("targets-shiny", "cache") # Must be an absolute/full path.
+project_home <- function() {
+  Sys.getenv(
+    "TARGETS_SHINY_HOME",
+    unset = R_user_dir("targets-shiny", "cache")
+  )
 }
 
 # Identify the absolute file path of any file in a project
 # given the project's name.
 project_path <- function(name, ...) {
-  file.path(project_parent(), name, ...)
+  file.path(project_home(), name, ...)
 }
 
 # Identify the absolute path of the project's stdout log file.
@@ -27,7 +30,7 @@ project_stderr <- function() {
 
 # Identify all the instantiated projects of the current user.
 project_list <- function() {
-  list.dirs(project_parent(), full.names = FALSE, recursive = FALSE)
+  list.dirs(project_home(), full.names = FALSE, recursive = FALSE)
 }
 
 # Identify the first project in the project list.
