@@ -6,6 +6,14 @@ project_path <- function(name, ...) {
   file.path(project_parent(), name, ...)
 }
 
+project_stdout <- function() {
+  project_path(project_get(), "stdout.txt")
+}
+
+project_stderr <- function() {
+  project_path(project_get(), "stderr.txt")
+}
+
 project_list <- function() {
   list.dirs(project_parent(), full.names = FALSE, recursive = FALSE)
 }

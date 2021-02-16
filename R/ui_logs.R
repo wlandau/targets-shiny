@@ -4,7 +4,7 @@ card_stdout <- bs4Card(
   status = "primary",
   solidHeader = TRUE,
   width = 6,
-  textOutput("stdout")
+  htmlOutput("stdout")
 )
 
 card_stderr <- bs4Card(
@@ -13,7 +13,7 @@ card_stderr <- bs4Card(
   status = "primary",
   solidHeader = TRUE,
   width = 6,
-  textOutput("stderr")
+  htmlOutput("stderr")
 )
 
 tab_logs <- bs4TabItem("logs", fluidRow(card_stdout, card_stderr))

@@ -1,4 +1,6 @@
 server <- function(input, output, session) {
+  dir <- getwd()
+  session$onSessionEnded(function() setwd(dir))
   project_select()
   project_load()
   tar_watch_server("targets-shiny")
@@ -42,5 +44,13 @@ server <- function(input, output, session) {
   output$plot <- renderPlot({
     process$running
     results_plot()
+  })
+  output$stdout <- renderUI({
+    if (process$running) invalidateLater(100)
+    log_html(project_stdout())
+  })
+  output$stderr <- renderUI({
+    if (process$running) invalidateLater(100)
+    log_html(project_stderr())
   })
 }

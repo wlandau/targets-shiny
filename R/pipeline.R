@@ -38,10 +38,11 @@ write_pipeline <- function(
     library(tarchetypes)
     library(tidyr)
     source("functions.R")
+    options(crayon.enabled = FALSE)
     tar_option_set(
       packages = c("ggplot2", "rstanarm", "tibble"),
       memory = "transient",
-      garbage_collection = "true"
+      garbage_collection = TRUE
     )
     models <- tar_map(
       values = list(biomarker = !!biomarkers),
