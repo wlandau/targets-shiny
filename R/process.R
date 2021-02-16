@@ -13,10 +13,10 @@ process_run <- function() {
   px <- tar_make(callr_function = r_bg, callr_arguments = args)
   # Do not give back control until the pipeline write a _targets/meta/process
   # file with the PID of the main process.
-  while(process_not_done(px) && !tar_exist_process()) Sys.sleep(0.05)
+  while (process_not_done(px) && !tar_exist_process()) Sys.sleep(0.05)
   # Do not give back control until the PID in _targets/meta/process
   # agrees with the PID of the process handle we have in memory.
-  while(process_not_done(px) && !process_agrees(px)) Sys.sleep(0.05)
+  while (process_not_done(px) && !process_agrees(px)) Sys.sleep(0.05)
 }
 
 # Cancel the process if it is running.

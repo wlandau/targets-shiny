@@ -49,7 +49,7 @@ project_exists <- function() {
   any(nzchar(name)) && file.exists(project_path(name))
 }
 
-# Internally switch the app to the project with the given name. 
+# Internally switch the app to the project with the given name.
 project_set <- function(name) {
   writeLines(as.character(name), project_path("_project"))
   setwd(project_path(name))
@@ -62,7 +62,7 @@ project_select <- function(name = project_get(), choices = project_list()) {
 }
 
 # Create a directory for a new project but do not fill it.
-# project_save() populates and refreshes a project's files. 
+# project_save() populates and refreshes a project's files.
 project_create <- function(name) {
   name <- trimws(name)
   valid <- nzchar(name) && !(name %in% c("_project", project_list()))
