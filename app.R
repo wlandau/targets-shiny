@@ -1,5 +1,5 @@
 source("R/packages.R")
-source("R/ui.R")
+source("R/ui.R") # Sources multiple UI helper scripts.
 source("R/server.R")
 source("R/project.R")
 source("R/pipeline.R")

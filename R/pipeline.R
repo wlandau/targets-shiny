@@ -1,3 +1,4 @@
+# Write an R script of pipeline helper functions to the project directory.
 write_functions <- function(dir) {
   tar_helper(file.path(dir, "functions.R"), {
     get_data_biomarker <- function() {
@@ -27,6 +28,7 @@ write_functions <- function(dir) {
   })
 }
 
+# Write the _targets.R script to the project directory.
 write_pipeline <- function(
   dir,
   biomarkers =  c("albumin", "log_bilirubin", "log_platelet"),
