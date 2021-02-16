@@ -16,3 +16,4 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 .Renviron
+deploy.R
