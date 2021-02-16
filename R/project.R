@@ -10,7 +10,7 @@ project_home <- function() {
   if (identical(home, "")) {
     R_user_dir("targets-shiny", "cache")
   } else {
-    file.path(home, Sys.getenv("USER"))
+    file.path(home, Sys.getenv("USER"), ".targets-shiny")
   }
 }
 
