@@ -45,12 +45,12 @@ server <- function(input, output, session) {
     process$running
     results_plot()
   })
-  output$stdout <- renderUI({
+  output$stdout <- renderText({
     if (process$running) invalidateLater(100)
-    log_html(project_stdout())
+    paste0(readLines(project_stdout()), collapse = "\n")
   })
-  output$stderr <- renderUI({
+  output$stderr <- renderText({
     if (process$running) invalidateLater(100)
-    log_html(project_stderr())
+    paste0(readLines(project_stderr()), collapse = "\n")
   })
 }
