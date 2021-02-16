@@ -3,6 +3,7 @@
 process_run <- function() {
   if (!project_exists()) return()
   if (process_running()) return()
+  show_spinner()
   args <- list(
     cleanup = FALSE, # Important! Otherwise, gc() will end the process.
     supervise = FALSE, # Otherwise, the process will quit if we log out.
