@@ -1,5 +1,5 @@
 process_run <- function() {
-  if (project_undefined()) return()
+  if (!project_exists()) return()
   if (process_running()) return()
   args <- list(
     cleanup = FALSE,
@@ -13,7 +13,7 @@ process_run <- function() {
 }
 
 process_cancel <- function() {
-  if (project_undefined()) return()
+  if (!project_exists()) return()
   if (!process_running()) return()
   ps_kill(ps_handle(tar_pid()))
 }

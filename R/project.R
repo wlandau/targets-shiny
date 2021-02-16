@@ -27,8 +27,9 @@ project_get <- function() {
   if (file.exists(path)) readLines(project_path("_project"))
 }
 
-project_undefined <- function() {
-  !any(nzchar(project_get()))
+project_exists <- function() {
+  name <- project_get()
+  any(nzchar(name)) && file.exists(project_path(name))
 }
 
 project_set <- function(name) {
@@ -52,7 +53,7 @@ project_delete <- function(name) {
 }
 
 project_save <- function(biomarkers, iterations) {
-  if (project_undefined()) return()
+  if (!project_exists()) return()
   name <- project_get()
   settings <- list(biomarkers = biomarkers, iterations = iterations)
   saveRDS(settings, project_path(name, "settings.rds"))
@@ -61,7 +62,7 @@ project_save <- function(biomarkers, iterations) {
 }
 
 project_load <- function() {
-  if (project_undefined()) return()
+  if (!project_exists()) return()
   session <- getDefaultReactiveDomain()
   settings <- readRDS(project_path(project_get(), "settings.rds"))
   updatePickerInput(session, "biomarkers", selected = settings$biomarkers)
