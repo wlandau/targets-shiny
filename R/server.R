@@ -2,6 +2,11 @@ server <- function(input, output, session) {
   project_select()
   project_load()
   tar_watch_server("targets-shiny")
+  process <- reactiveValues(running = process_running())
+  observe({
+    invalidateLater(millis = 100)
+    process$running <- process_running()
+  })
   observe({
     req(input$project)
     project_set(input$project)
@@ -18,7 +23,7 @@ server <- function(input, output, session) {
     project_load()
   })
   observe({
-    invalidateLater(millis = 10)
+    process$running
     process_spinner()
   })
   observeEvent(input$project_create, {
@@ -34,7 +39,7 @@ server <- function(input, output, session) {
   observeEvent(input$run_start, process_run())
   observeEvent(input$run_cancel, process_cancel())
   output$plot <- renderPlot({
-    invalidateLater(millis = 1000)
+    process$running
     results_plot()
   })
 }
