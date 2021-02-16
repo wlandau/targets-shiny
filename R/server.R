@@ -17,10 +17,10 @@ server <- function(input, output, session) {
     project_set(input$project)
     project_load()
   })
-  observe({
-    invalidateLater(millis = 10)
-    process_spinner()
-  })
+  # observe({
+  #   invalidateLater(millis = 100)
+  #   process_spinner()
+  # })
   observeEvent(input$project_create, {
     project_create(input$project_new)
     project_select(input$project_new)
@@ -33,5 +33,8 @@ server <- function(input, output, session) {
   })
   observeEvent(input$run_start, process_run())
   observeEvent(input$run_cancel, process_cancel())
-  output$plot <- renderPlot(results_plot())
+  # output$plot <- renderPlot({
+  #   invalidateLater(millis = 100)
+  #   results_plot()
+  # })
 }
