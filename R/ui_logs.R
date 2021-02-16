@@ -5,6 +5,7 @@ card_stdout <- bs4Card(
   solidHeader = TRUE,
   width = 6,
   textOutput("stdout"),
+  # Makes sure the stdout log has appropriate line breaks and scrolling:
   tags$head(tags$style("#stdout {white-space: pre-wrap; overflow-y:scroll; max-height: 600px;}"))
 )
 
