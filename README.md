@@ -1,3 +1,5 @@
+This prototype app explores the combination of Shiny and [`targets`](https://docs.ropensci.org/targets/) to run long pipelines with persistent user storage.
+
 ## Bayesian joint models
 
 Bayesian joint models of survival and longitudinal non-survival outcomes reduce bias and describe relationships among endpoints ([Gould et al. 2015](https://pubmed.ncbi.nlm.nih.gov/24634327/)). Statisticians routinely refine and explore such complicated models ([Gelman et al. 2020](https://arxiv.org/abs/2011.01808)), but the computation is so slow that routine changes are tedious to refresh.

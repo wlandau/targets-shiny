@@ -1,0 +1,57 @@
+Package: targets.shiny
+Title: Shiny App with a Targets Pipeline
+Description: A pipeline toolkit for Statistics and data science in R,
+  the 'targets' package brings together function-oriented programming and
+  'Make'-like declarative workflows. The 'targets-shiny' app explores
+  the combination of Shiny and 'targets' to run computationally intense
+  data analysis pipelines with persistent user storage.
+Version: 0.0.0.9000
+License: MIT + file LICENSE
+URL: https://github.com/wlandau/targets-shiny
+BugReports: https://github.com/wlandau/targets-shiny/issues
+Authors@R: c(
+  person(
+    given = c("William", "Michael"),
+    family = "Landau",
+    role = c("aut", "cre"),
+    email = "will.landau@gmail.com",
+    comment = c(ORCID = "0000-0003-1878-3253")
+  ),
+  person(
+    family = "Eli Lilly and Company",
+    role = "cph"
+  ))
+Depends:
+  R (>= 3.5.0)
+Imports:
+  bayesplot (>= 1.8.0),
+  bs4Dash (>= 2.0.0),
+  callr (>= 3.4.3),
+  dplyr (>= 1.0.3),
+  fs (>= 1.5.0)
+  fst (>= 0.9.4)
+  ggplot2 (>= 3.3.3),
+  gt (>= 0.2.2)
+  markdown (>= 1.1),
+  pingr (>= 2.0.1),
+  ps (>= 1.5.0),
+  qs (>= 0.23.2),
+  rstanarm (>= 2.21.1),
+  shiny (>= 1.6.0),
+  shinybusy (>= 0.2.2),
+  shinycssloaders (>= 1.0.0),
+  shinyWidgets (>= 0.5.7),
+  targets (>= 0.1.0.9000),
+  tibble (>= 3.0.1),
+  tidyr (>= 1.1.2),
+  tools,
+  visNetwork (>= 2.0.9)
+Remotes:
+  RinteRface/bs4Dash,
+  wlandau/targets
+Encoding: UTF-8
+Language: en-US
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
