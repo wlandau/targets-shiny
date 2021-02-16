@@ -1,6 +1,7 @@
 server <- function(input, output, session) {
-  # Important! This app changes working directories to switch projects,
-  # so we need to reset the working directory when the app exits.
+  # Important! This app changes working directories to switch projects
+  # (a requirement of the targets package).
+  # So we need to reset the working directory when the app exits.
   # The proper way t odo this is with a Shiny callback.
   # Simple on.exit() will not work.
   dir <- getwd()

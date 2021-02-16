@@ -1,57 +1,82 @@
+# All the projects live in project_parent(). tools::R_user_dir()
+# provides unobtrusive persistent user-specific storage for packages
+# and apps. If you are the administrator and need to change where
+# persistent user files are stored, this is the place to do so.
+# This app must be deployed to RStudio Server, RStudio Connect,
+# or other infrastructure that runs the app as the logged-in user
+# and allows persistent user-side storage. shinyapps.io is not sufficient.
 project_parent <- function() {
-  R_user_dir("targets-shiny", "cache")
+  R_user_dir("targets-shiny", "cache") # Must be an absolute/full path.
 }
 
+# Identify the absolute file path of any file in a project
+# given the project's name.
 project_path <- function(name, ...) {
   file.path(project_parent(), name, ...)
 }
 
+# Identify the absolute path of the project's stdout log file.
 project_stdout <- function() {
   project_path(project_get(), "stdout.txt")
 }
 
+# Identify the absolute path of the project's stderr log file.
 project_stderr <- function() {
   project_path(project_get(), "stderr.txt")
 }
 
+# Identify all the instantiated projects of the current user.
 project_list <- function() {
   list.dirs(project_parent(), full.names = FALSE, recursive = FALSE)
 }
 
+# Identify the first project in the project list.
+# This is useful for finding out which project to switch to
+# when the current project is deleted.
 project_head <- function() {
   head(project_list(), 1)
 }
 
+# Identify the project currently loaded.
 project_get <- function() {
   path <- project_path("_project")
   if (file.exists(path)) readLines(project_path("_project"))
 }
 
+# Determine if the user is currently in a valid project.
 project_exists <- function() {
   name <- project_get()
   any(nzchar(name)) && file.exists(project_path(name))
 }
 
+# Internally switch the app to the project with the given name. 
 project_set <- function(name) {
   writeLines(as.character(name), project_path("_project"))
   setwd(project_path(name))
 }
 
+# Update the UI to reflect the identity of the current project.
 project_select <- function(name = project_get(), choices = project_list()) {
   session <- getDefaultReactiveDomain()
   updatePickerInput(session, "project", NULL, name, choices)
 }
 
+# Create a directory for a new project but do not fill it.
+# project_save() populates and refreshes a project's files. 
 project_create <- function(name) {
   name <- trimws(name)
   valid <- nzchar(name) && !(name %in% c("_project", project_list()))
   if (valid) dir_create(project_path(name))
 }
 
+# Delete a project but do not necessarily switch to another.
 project_delete <- function(name) {
   dir_delete(project_path(name))
 }
 
+# Populate or refresh a project's files.
+# This happens when a project is created or the user
+# changes settings that affect the pipeline.
 project_save <- function(biomarkers, iterations) {
   if (!project_exists()) return()
   name <- project_get()
@@ -61,6 +86,8 @@ project_save <- function(biomarkers, iterations) {
   write_pipeline(project_path(name), biomarkers, iterations)
 }
 
+# Read the settings file of the current project
+# and update the UI to reflect the project's last known settings.
 project_load <- function() {
   if (!project_exists()) return()
   session <- getDefaultReactiveDomain()
