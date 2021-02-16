@@ -3,14 +3,18 @@ process_run <- function() {
   if (process_running()) return()
   stdout <- project_path(project_get(), "stdout.txt")
   stderr <- project_path(project_get(), "stderr.txt")
-  args <- list(supervise = FALSE, stdout = stdout, stderr = stderr)
+  args <- list(
+    cleanup = FALSE,
+    supervise = FALSE,
+    stdout = stdout,
+    stderr = stderr
+  )
   px <- tar_make(callr_function = r_bg, callr_arguments = args)
   while(process_not_done(px) && !tar_exist_process()) Sys.sleep(0.05)
   while(process_not_done(px) && !process_agrees(px)) Sys.sleep(0.05)
 }
 
 process_cancel <- function() {
-  browser()
   if (project_undefined()) return()
   if (!process_running()) return()
   ps_kill(ps_handle(tar_pid()))

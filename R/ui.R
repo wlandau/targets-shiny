@@ -12,10 +12,10 @@ tabs <- bs4TabItems(
 
 menu <- bs4SidebarMenu(
   id = "menu",
-  bs4SidebarMenuItem("About", tabName = "about", icon = icon("info")),
   bs4SidebarMenuItem("Control", tabName = "control", icon = icon("cog")),
   bs4SidebarMenuItem("Progress", tabName = "progress", icon = icon("spinner")),
-  bs4SidebarMenuItem("Results", tabName = "results", icon = icon("chart-area"))
+  bs4SidebarMenuItem("Results", tabName = "results", icon = icon("chart-area")),
+  bs4SidebarMenuItem("About", tabName = "about", icon = icon("info"))
 )
 
 ui <- bs4DashPage(
