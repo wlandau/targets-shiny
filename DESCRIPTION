@@ -48,8 +48,6 @@ Imports:
   tidyr (>= 1.1.2),
   tools,
   visNetwork (>= 2.0.9)
-Suggests:
-  rprojroot (>= 2.0.2)
 Remotes:
   RinteRface/bs4Dash,
   wlandau/targets
