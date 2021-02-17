@@ -52,7 +52,7 @@ Every [`targets`](https://docs.ropensci.org/targets/) pipeline requires a `_targ
 
 ### Persistent background processes
 
-The pipeline needs to run in a background process that persists after the user logs out or the app itself exits. Before you launch a new process, first check if there is already an existing process running. [`tar_pid()`](https://docs.ropensci.org/targets/reference/tar_pid.html) retrieves the ID of the most recent process to run the pipeline, and [`ps::pid()`](https://ps.r-lib.org/reference/ps_pids.html) lists the IDs of all processes currently running. If no process is already running, start the [`targets`](https://docs.ropensci.org/targets/) pipeline in a persistent background process:
+This particular app runs pipelines as background processes that persist after the user logs out. Before you launch a new pipeline, first check if there is already an existing one running. [`tar_pid()`](https://docs.ropensci.org/targets/reference/tar_pid.html) retrieves the ID of the most recent process to run the pipeline, and [`ps::pid()`](https://ps.r-lib.org/reference/ps_pids.html) lists the IDs of all processes currently running. If no process is already running, start the [`targets`](https://docs.ropensci.org/targets/) pipeline in a persistent background process:
 
 ```r
 processx_handle <- tar_make(
@@ -67,6 +67,10 @@ processx_handle <- tar_make(
 ```
 
 `cleanup = FALSE` keeps the process alive after the [`processx`](https://processx.r-lib.org) handle is garbage collected, and `supervise = FALSE` keeps process alive after the app itself exits. As long as the server keeps running, the pipeline will keep running. To help manage resources, the UI should have an action button to cancel the current process, and the server should automatically cancel it when the user deletes the project.
+
+### Scaling out to many users
+
+As described above, this particular app runs pipelines as persistent background processes on the server. This approach generalizes well across proprietary installations of RStudio Connect and RStudio Server, which is why it is featured here, but it may not scale well for a large number of users. Serious apps in production should instead consider submitting all background processes as jobs on a cluster like SLURM or a cloud computing platform like Amazon Web Services.
 
 ### Transient mode
 
