@@ -8,7 +8,7 @@ card_create <- bs4Card(
     inputId = "project_new",
     label = NULL,
     value = NULL,
-    placeholder = "new_project_name"
+    placeholder = "name of new project"
   ),
   actionBttn(
     inputId = "project_create",
