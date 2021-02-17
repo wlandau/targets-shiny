@@ -73,7 +73,7 @@ card_models <- bs4Card(
 
 card_run <- bs4Card(
   inputID = "run",
-  title = "Run",
+  title = "Run pipeline",
   status = "primary",
   solidHeader = TRUE,
   width = 12,
@@ -89,7 +89,7 @@ card_run <- bs4Card(
     ),
     actionBttn(
       inputId = "run_cancel",
-      label = "Cancel run",
+      label = "Cancel pipeline",
       style = "simple",
       color = "warning",
       size = "sm",
