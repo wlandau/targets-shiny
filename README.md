@@ -52,7 +52,7 @@ Every [`targets`](https://docs.ropensci.org/targets/) pipeline requires a `_targ
 
 ### Scaling out to many users
 
-Serious scalable apps in production should submit pipelines and other long background processes as jobs on a cluster like SLURM or a cloud computing platform like Amazon Web Services. However, as described below, this particular app uses local server-side processes. The reasons are purely pedagogical: local processes are more likely to generalize across proprietary installations of [Shiny Server](https://rstudio.com/products/shiny/shiny-server/) and [RStudio Connect](https://rstudio.com/products/connect/).
+Serious scalable apps in production should submit pipelines and other long background processes as jobs on a cluster like SLURM or a cloud computing platform like Amazon Web Services. However, as described below, this particular app uses local server-side processes instead. The reasons are purely pedagogical: local processes are more likely to generalize across proprietary installations of [Shiny Server](https://rstudio.com/products/shiny/shiny-server/) and [RStudio Connect](https://rstudio.com/products/connect/).
 
 ### Persistent background processes
 
