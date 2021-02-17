@@ -38,6 +38,7 @@ Imports:
   qs (>= 0.23.2),
   rstanarm (>= 2.21.1),
   shiny (>= 1.6.0),
+  shinyalert (>= 2.0.0),
   shinybusy (>= 0.2.2),
   shinycssloaders (>= 1.0.0),
   shinyWidgets (>= 0.5.7),
@@ -47,6 +48,8 @@ Imports:
   tidyr (>= 1.1.2),
   tools,
   visNetwork (>= 2.0.9)
+Suggests:
+  rprojroot (>= 2.0.2)
 Remotes:
   RinteRface/bs4Dash,
   wlandau/targets

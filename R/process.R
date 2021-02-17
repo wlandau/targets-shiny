@@ -5,8 +5,8 @@ process_run <- function() {
   if (process_running()) return()
   show_spinner()
   args <- list(
-    cleanup = FALSE, # Important! Otherwise, gc() will end the process.
-    supervise = FALSE, # Otherwise, the process will quit if we log out.
+    cleanup = FALSE, # Important! Garbage collection should not kill the process.
+    supervise = process_transient(), # Otherwise, the process will quit if we log out.
     stdout = project_stdout(),
     stderr = project_stderr()
   )
@@ -53,4 +53,26 @@ process_spinner <- function() {
   } else {
     hide_spinner()
   }
+}
+
+# Detect if storage is transient and projects will vanish on logout.
+# The app author needs to know this in advance and set the
+# TARGETS_SHINY_TRANSIENT environment variable.
+process_transient <- function() {
+  env <- Sys.getenv("TARGETS_SHINY_TRANSIENT")
+  identical(trimws(tolower(env)), "true")
+}
+
+# Alert the user if the project is transient
+process_transient_alert <- function() {
+  if (!process_transient()) {
+    return()
+  }
+  text <- paste(
+    "This app is deployed to infrastructure that",
+    "does not support persistent storage.",
+    "When you log out, your pipelines will stop",
+    "and your projects will vanish."
+  )
+  shinyalert("Transient mode", text = text, type = "info")
 }

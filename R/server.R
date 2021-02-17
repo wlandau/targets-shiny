@@ -6,6 +6,8 @@ server <- function(input, output, session) {
   # Simple on.exit() will not work.
   dir <- getwd()
   session$onSessionEnded(function() setwd(dir))
+  # Alert users if the app is in transient mode.
+  process_transient_alert()
   # Load the saved settings of the project into the biomarker
   # dropdown and iterations slider. This is important to do
   # before project_select() because of the reactivity loop.
