@@ -51,12 +51,13 @@ card_models <- bs4Card(
   status = "primary",
   solidHeader = TRUE,
   width = 12,
-  selectInput(
+  awesomeCheckboxGroup(
     inputId = "biomarkers",
-    label = "Biomarkers",
+    label = "Biomarkers", 
     choices = c("albumin", "log_bilirubin", "log_platelet"),
     selected = c("albumin", "log_bilirubin"),
-    multiple = TRUE
+    status = "primary",
+    inline = TRUE
   ),
   chooseSliderSkin("Flat", color = "blue"),
   sliderInput(
