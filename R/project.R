@@ -4,7 +4,7 @@
 # persistent user files are stored, this is the place to do so.
 # In transient mode, the app only writes to temporary storage.
 project_home <- function() {
-  if (process_transient()) return(file.path(tempdir(), "targets-shiny"))
+  if (transient_active()) return(file.path(tempdir(), "targets-shiny"))
   home <- Sys.getenv("TARGETS_SHINY_HOME")
   if (identical(home, "")) {
     R_user_dir("targets-shiny", "cache")
