@@ -24,7 +24,7 @@ server <- function(input, output, session) {
   # Repeatedly check if the pipeline switched from stopped to running
   # or vice versa.
   observe({
-    invalidateLater(millis = 100)
+    invalidateLater(millis = 10)
     process$running <- process_running()
   })
   # Show/hide the run buttons depending on whether the pipeline is running.
