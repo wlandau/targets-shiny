@@ -29,6 +29,10 @@ Shiny apps with [`targets`](https://docs.ropensci.org/targets/) require speciali
 
 [`targets`](https://docs.ropensci.org/targets/) writes to storage to ensure the pipeline stays up to date after R exits. This storage must be persistent and user-specific. `tools::R_user_dir("app_name", which = "cache")` covers some situations. In addition, it is best to deploy to a service like [RStudio Server](https://rstudio.com/products/rstudio-server-pro/) or [RStudio Connect](https://rstudio.com/products/connect/) and provision enough space for the expected number of users. Unfortunately, [shinyapps.io](https://www.shinyapps.io) is not sufficient. Please consult your system administrator.
 
+### Multiple projects
+
+Projects manage multiple versions of the pipeline. In this app, each project is a directory inside user storage with app input settings, pipeline configuration, and results. A top-level `_project` file identifies the current active project. Functions in `R/project.R` configure, load, create, and destroy projects. The `update*()` functions in Shiny and `shinyWidgets`, such as `updateSliderInput()`, are particularly handy for restoring the input settings of a saved project. That is why this app does not need a single `renderUI()` or `uiOutput()`.
+
 ### Working directory
 
 For reasons [described here](https://github.com/ropensci/targets/discussions/297), the `_targets.R` configuration file and `_targets/` data store always live at the root directory of the pipeline (where you run [`tar_make()`](https://docs.ropensci.org/targets/reference/tar_make.html)). So in order to run a pipeline in user storage, the app needs to change directories to the pipeline root. The `set_project()` function in this particular app accomplishes this, with a catch: the Shiny server function needs a callback to restore the working directory when the app exits.
@@ -42,6 +46,10 @@ server <- function(input, output, session) {
 ```
 
 ### Pipeline setup
+
+
+### Multiple projects
+
 
 ### Persistent background processes
 
