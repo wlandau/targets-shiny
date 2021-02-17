@@ -50,6 +50,10 @@ server <- function(input, output, session) {
 
 Every [`targets`](https://docs.ropensci.org/targets/) pipeline requires a `_targets.R` configuration file and R scripts with supporting functions if applicable. The [`tar_helper()`](https://docs.ropensci.org/targets/reference/tar_helper.html) function writes arbitrary R scripts to the location of your choice, and tidy evaluation with `!!` is a convenient templating mechanism that translates Shiny UI inputs into target definitions. In this app, the functions in `R/pipeline.R` demonstrate the technique.
 
+### Scaling out to many users
+
+Serious scalable apps in production should submit pipelines and other long background processes as jobs on a cluster like SLURM or a cloud computing platform like Amazon Web Services. However, as described below, this particular app uses local server-side processes. The reasons are purely pedagogical: local processes are more likely to generalize across proprietary installations of [Shiny Server](https://rstudio.com/products/shiny/shiny-server/) and [RStudio Connect](https://rstudio.com/products/connect/).
+
 ### Persistent background processes
 
 This particular app runs pipelines as background processes that persist after the user logs out. Before you launch a new pipeline, first check if there is already an existing one running. [`tar_pid()`](https://docs.ropensci.org/targets/reference/tar_pid.html) retrieves the ID of the most recent process to run the pipeline, and [`ps::pid()`](https://ps.r-lib.org/reference/ps_pids.html) lists the IDs of all processes currently running. If no process is already running, start the [`targets`](https://docs.ropensci.org/targets/) pipeline in a persistent background process:
@@ -67,18 +71,6 @@ processx_handle <- tar_make(
 ```
 
 `cleanup = FALSE` keeps the process alive after the [`processx`](https://processx.r-lib.org) handle is garbage collected, and `supervise = FALSE` keeps process alive after the app itself exits. As long as the server keeps running, the pipeline will keep running. To help manage resources, the UI should have an action button to cancel the current process, and the server should automatically cancel it when the user deletes the project.
-
-### Scaling out to many users
-
-Serious scalable apps in production should submit pipelines and other long background processes as jobs on a cluster like SLURM or a cloud computing platform like Amazon Web Services. This particular app uses local server-side processes purely for pedagogical purposes: it is more likely to generalize across proprietary installations of [Shiny Server](https://rstudio.com/products/shiny/shiny-server/) and [RStudio Connect](https://rstudio.com/products/connect/).
-
-### Transient mode
-
-For demonstration purposes, you may wish to deploy your app to a more limited service like [shinyapps.io](https://www.shinyapps.io). For these situations, consider implementing a transient mode to alert users and clean up resources. If this particular app is deployed with the `TARGETS_SHINY_TRANSIENT` environment variable equal to `"true"`, then:
-
-1. `tar_make()` runs with `supervise = TRUE` in `callr_arguments` so that all pipelines terminate when the R session exits.
-2. All user storage lives in a subdirectory of `tempdir()` so project files are automatically cleaned up.
-3. When the app starts, the UI shows a `shinyalert` to warn users about the above.
 
 ### Monitor the background process
 
@@ -113,6 +105,15 @@ This reactive value helps us:
 
 1. Only show certain UI elements if the pipeline is running. Use `process$status$running` to show activity or disable inputs when the pipeline is busy. Useful tools include [`show_spinner()`](https://dreamrs.github.io/shinybusy/reference/manual-spinner.html) from [`shinybusy`](/dreamrs.github.io/shinybusy/) and `show()`, `hide()`, `enable()`, and `disable()` from [`shinyjs`](https://deanattali.com/shinyjs/).
 2. Refresh output and logs when the pipeline starts or stops. Simply write `process$status` inside a reactive context such as `observe()` or `renderPlot()`.
+
+### Transient mode
+
+For demonstration purposes, you may wish to deploy your app to a more limited service like [shinyapps.io](https://www.shinyapps.io). For these situations, consider implementing a transient mode to alert users and clean up resources. If this particular app is deployed with the `TARGETS_SHINY_TRANSIENT` environment variable equal to `"true"`, then:
+
+1. `tar_make()` runs with `supervise = TRUE` in `callr_arguments` so that all pipelines terminate when the R session exits.
+2. All user storage lives in a subdirectory of `tempdir()` so project files are automatically cleaned up.
+3. When the app starts, the UI shows a `shinyalert` to warn users about the above.
+
 
 ### Progress
 
