@@ -21,14 +21,8 @@ menu <- bs4SidebarMenu(
   bs4SidebarMenuItem("About", tabName = "about", icon = icon("info"))
 )
 
-body <- bs4DashBody(
-  useShinyalert(),
-  use_busy_spinner(spin = "cube-grid"),
-  tabs
-)
-
 ui <- bs4DashPage(
-  body = body,
+  body = bs4DashBody(useShinyalert(), useShinyjs(), tabs),
   header = bs4DashNavbar(title = "targets-shiny", controlbarIcon = NULL),
   sidebar = bs4DashSidebar(skin = "light", inputId = "sidebar", menu),
   dark = FALSE

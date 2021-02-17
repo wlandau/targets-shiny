@@ -27,11 +27,10 @@ server <- function(input, output, session) {
     invalidateLater(millis = 100)
     process$running <- process_running()
   })
-  # Toggle the shinybusy spinner whenever the pipeline switches
-  # from stopped to running or vice versa.
+  # Show/hide the run buttons depending on whether the pipeline is running.
   observe({
     process$running
-    process_spinner()
+    process_button()
   })
   # Every time the user selects a project in the drop-down menu
   # of the "Control" tab, switch to that project and load the settings.

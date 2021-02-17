@@ -82,25 +82,25 @@ card_run <- bs4Card(
   status = "primary",
   solidHeader = TRUE,
   width = 12,
-  actionBttn(
-    inputId = "run_start",
-    label = "Run pipeline",
-    style = "simple",
-    color = "success",
-    size = "sm",
-    block = FALSE,
-    no_outline = TRUE
-  ),
-  br(),
-  br(),
-  actionBttn(
-    inputId = "run_cancel",
-    label = "Cancel run",
-    style = "simple",
-    color = "danger",
-    size = "sm",
-    block = FALSE,
-    no_outline = TRUE
+  fluidRow(
+    actionBttn(
+      inputId = "run_start",
+      label = "Run pipeline",
+      style = "simple",
+      color = "success",
+      size = "sm",
+      block = FALSE,
+      no_outline = TRUE
+    ),
+    actionBttn(
+      inputId = "run_cancel",
+      label = "Cancel run",
+      style = "simple",
+      color = "warning",
+      size = "sm",
+      block = FALSE,
+      no_outline = TRUE
+    )
   )
 )
 
@@ -108,6 +108,6 @@ tab_control <- bs4TabItem(
   "control",
   fluidRow(
     column(6, card_create, card_select),
-    column(6, card_run, card_models)
+    column(6, card_models, card_run)
   )
 )

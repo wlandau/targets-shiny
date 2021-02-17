@@ -3,7 +3,7 @@
 process_run <- function() {
   if (!project_exists()) return()
   if (process_running()) return()
-  show_spinner()
+  process_show_running()
   args <- list(
     cleanup = FALSE, # Important! Garbage collection should not kill the process.
     supervise = transient_active(), # Otherwise, the process will quit if we log out.
@@ -44,13 +44,21 @@ process_agrees <- function(px) {
   identical(px$get_pid(), tar_pid())
 }
 
-# Show a nice shinybusy spinner if and only if the pipeline
-# is running. We toggle this with a reactive that gets invalidated
-# when the pipeline stops or starts.
-process_spinner <- function() {
+# Show/hide the run buttons depending on whether the pipeline is running.
+process_button <- function() {
   if (process_running()) {
-    show_spinner()
+    process_show_running()
   } else {
-    hide_spinner()
+    process_show_stopped()
   }
+}
+
+process_show_running <- function() {
+  hide("run_start")
+  show("run_cancel")
+}
+
+process_show_stopped <- function() {
+  hide("run_cancel")
+  show("run_start")
 }

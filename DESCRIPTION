@@ -1,10 +1,7 @@
 Package: targets.shiny
 Title: Shiny App with a Targets Pipeline
-Description: A pipeline toolkit for Statistics and data science in R,
-  the 'targets' package brings together function-oriented programming and
-  'Make'-like declarative workflows. The 'targets-shiny' app explores
-  the combination of Shiny and 'targets' to run computationally intense
-  data analysis pipelines with persistent user storage.
+Description: This DESCRIPTION file is for deployment purposes only
+  and not to make the app into a formal R package.
 Version: 0.0.0.9000
 License: MIT + file LICENSE
 URL: https://github.com/wlandau/targets-shiny
@@ -39,8 +36,8 @@ Imports:
   rstanarm (>= 2.21.1),
   shiny (>= 1.6.0),
   shinyalert (>= 2.0.0),
-  shinybusy (>= 0.2.2),
   shinycssloaders (>= 1.0.0),
+  shinyjs (>= 2.0.0),
   shinyWidgets (>= 0.5.7),
   targets (>= 0.1.0.9000),
   tarchetypes (>= 0.0.4),
