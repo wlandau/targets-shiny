@@ -69,7 +69,40 @@ processx_handle <- tar_make(
 
 ### Progress
 
+The [`tar_watch()`](https://docs.ropensci.org/targets/reference/tar_watch.html) Shiny module is available through the functions [`tar_watch_ui()`](https://docs.ropensci.org/targets/reference/tar_watch_ui.html) and [`tar_watch_server()`](https://docs.ropensci.org/targets/reference/tar_watch_server.html). This module continuously refreshes the [`tar_visnetwork()`](https://docs.ropensci.org/targets/reference/tar_visnetwork.html) graph and the [`tar_progress_branches()`](https://docs.ropensci.org/targets/reference/tar_progress_branches.html) table to communicate the current status of the pipeline. Visit [this article](https://shiny.rstudio.com/articles/modules.html) for more information on Shiny modules.
+
 ### Logs
+
+The `stdout` and `stderr` log files provide cruder but more immediate information on the progress of the pipeline. To generate logs, set the `stdout` and `stderr` `callr` arguments as described previously. Then in the app server function, define text outputs that look something like this:
+
+```r
+process <- reactiveValues(running = process_running())
+observe({
+  invalidateLater(millis = 100)
+  process$running <- process_running()
+})
+output$stdout <- renderText({
+  if (process$running) invalidateLater(100)
+  readLines("/PATH/TO/USER/PROJECT/stdout.txt")
+})
+output$stderr <- renderText({
+  if (process$running) invalidateLater(100)
+  readLines("/PATH/TO/USER/PROJECT/stderr.txt")
+})
+```
+
+`process_running()` is a custom function that checks `targets::tar_pid()` and `ps::ps_pids()` to figure out if the pipeline is running. `process$running` is a reactive value that invalidates every time the pipeline switches from running to stopped (or vice versa) within 100 milliseconds. That way, the app only watches the logs if the pipeline is actually running.
+
+Lastly, define text outputs in the UI that display proper line breaks and enable scrolling:
+
+```r
+fluidRow(
+  textOutput("stdout"),
+  textOutput("stderr"),
+  tags$head(tags$style("#stdout {white-space: pre-wrap; overflow-y:scroll; max-height: 600px;}")),
+  tags$head(tags$style("#stderr {white-space: pre-wrap; overflow-y:scroll; max-height: 600px;}"))
+)
+```
 
 ### Results
 
