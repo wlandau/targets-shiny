@@ -2,10 +2,9 @@
 # provides unobtrusive persistent user-specific storage for packages
 # and apps. If you are the administrator and need to change where
 # persistent user files are stored, this is the place to do so.
-# This app must be deployed to RStudio Server, RStudio Connect,
-# or other infrastructure that runs the app as the logged-in user
-# and allows persistent user-side storage. shinyapps.io is not sufficient.
+# In transient mode, the app only writes to temporary storage.
 project_home <- function() {
+  if (process_transient()) return(file.path(tempdir(), "targets-shiny"))
   home <- Sys.getenv("TARGETS_SHINY_HOME")
   if (identical(home, "")) {
     R_user_dir("targets-shiny", "cache")

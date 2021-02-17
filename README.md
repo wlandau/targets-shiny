@@ -17,7 +17,7 @@ The Results tab refreshes the final plot every time the pipeline stops. The plot
 ## Administration
 
 1. Optional: to customize the location of persistent storage, create an `.Renviron` file at the app root and set the `TARGETS_SHINY_HOME` environment variable. If you do, the app will store projects within `file.path(Sys.getenv("TARGETS_SHINY_HOME"), Sys.getenv("USER"), ".targets-shiny")`. Otherwise, storage will default to `tools::R_user_dir("targets-shiny", which = "cache")`
-2. Deploy the app to [RStudio Server](https://rstudio.com/products/rstudio-server-pro/), [RStudio Connect](https://rstudio.com/products/connect/), or other service that supports persistent server-side storage. Unfortunately, [shinyapps.io](https://www.shinyapps.io) is not sufficient.
+2. To support persistent pipelines, deploy the app to [RStudio Server](https://rstudio.com/products/rstudio-server-pro/), [RStudio Connect](https://rstudio.com/products/connect/), or other service that supports persistent server-side storage. Alternatively, if you just want to demo the app on a limited service such as [shinyapps.io](https://www.shinyapps.io), set the `TARGETS_SHINY_TRANSIENT` environment variable to `"true"` in the `.Renviron` file in the app root directory. That way, the UI alerts the users that their projects are transient, the app writes to temporary storage (overriding `TARGETS_TRANSIENT_HOME`), and background processes terminate when the app exits.
 3. Require a login so the app knows the user name.
 4. Run the app as the logged-in user, not the system administrator or default user.
 5. If applicable, raise automatic timeout thresholds in [RStudio Connect](https://rstudio.com/products/connect/) so the background processes running pipelines remain alive long enough to finish.
@@ -28,7 +28,7 @@ Shiny apps with [`targets`](https://docs.ropensci.org/targets/) require speciali
 
 ### User storage
 
-[`targets`](https://docs.ropensci.org/targets/) writes to storage to ensure the pipeline stays up to date after R exits. This storage must be persistent and user-specific. This particular app defaults to `tools::R_user_dir("app_name", which = "cache")` but uses `file.path(Sys.getenv("TARGETS_SHINY_HOME"), Sys.getenv("USER"))` if `TARGETS_SHINY_HOME` is defined in the `.Renviron` file at the app root directory. In addition, it is best to deploy to a service like [RStudio Server](https://rstudio.com/products/rstudio-server-pro/) or [RStudio Connect](https://rstudio.com/products/connect/) and provision enough space for the expected number of users. Unfortunately, [shinyapps.io](https://www.shinyapps.io) is not sufficient. Please consult your system administrator.
+[`targets`](https://docs.ropensci.org/targets/) writes to storage to ensure the pipeline stays up to date after R exits. This storage must be persistent and user-specific. This particular app defaults to `tools::R_user_dir("app_name", which = "cache")` but uses `file.path(Sys.getenv("TARGETS_SHINY_HOME"), Sys.getenv("USER"))` if `TARGETS_SHINY_HOME` is defined in the `.Renviron` file at the app root directory. In addition, it is best to deploy to a service like [RStudio Server](https://rstudio.com/products/rstudio-server-pro/) or [RStudio Connect](https://rstudio.com/products/connect/) and provision enough space for the expected number of users.
 
 ### Multiple projects
 
@@ -67,6 +67,14 @@ processx_handle <- tar_make(
 ```
 
 `cleanup = FALSE` keeps the process alive after the [`processx`](https://processx.r-lib.org) handle is garbage collected, and `supervise = FALSE` keeps process alive after the app itself exits. As long as the server keeps running, the pipeline will keep running. To help manage resources, the UI should have an action button to cancel the current process, and the server should automatically cancel it when the user deletes the project.
+
+### Transient mode
+
+For demonstration purposes, you may wish to deploy your app to a more limited service like [shinyapps.io](https://www.shinyapps.io). For these situations, consider implementing a transient mode to alert users and clean up resources. If this particular app is deployed with `TARGETS_SHINY_TRANSIENT` equal to `"true"`, then:
+
+1. `tar_make()` runs with `supervise = TRUE` so the all pipelines terminate when the R session exits.
+2. All user storage lives in a subdirectory of `tempdir()` so project files are automatically cleaned up.
+3. When the app starts, the UI shows a `shinyalert` to warn users about the above.
 
 ### Progress
 
