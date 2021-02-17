@@ -8,7 +8,7 @@ Bayesian joint models of survival and longitudinal non-survival outcomes reduce 
 
 When you first open the app, create a new project to establish a data analysis pipeline. You can create, switch, and delete projects at any time. Next, select the biomarkers and number of Markov chain Monte Carlo iterations. The pipeline will run one [univariate joint model](https://mc-stan.org/rstanarm/articles/jm.html#univariate-joint-model-current-value-association-structure) on each biomarker for the number of iterations you select. Each model analyzes [`rstanarm`](https://mc-stan.org/rstanarm/) datasets [`pbcLong`](https://mc-stan.org/rstanarm/reference/rstanarm-datasets.html) and [`pbcSurv`](https://mc-stan.org/rstanarm/reference/rstanarm-datasets.html) to jointly model survival (time to event) and the biomarker (longitudinally).
 
-Click the "Run pipeline" button to run the correct models in the correct order. A spinner will appear in the upper right to show you that the pipeline is running in the background. The pipeline will run to completion even if you switch projects, log out, or get disconnected for idleness.
+Click the "Run pipeline" button to run the correct models in the correct order. The app button replaces the "Run pipeline" button with the the "Cancel pipeline" button when the pipeline of the current project is running in the background. The pipeline will run to completion even if you switch projects, log out, or get disconnected for idleness.
 
 While the pipeline is running, the Progress and Logs tabs continuously refresh to monitor progress. The Progress tab uses the [`tar_watch()`](https://docs.ropensci.org/targets/reference/tar_watch.html) Shiny module, available through the functions [`tar_watch_ui()`](https://docs.ropensci.org/targets/reference/tar_watch_ui.html) and [`tar_watch_server()`](https://docs.ropensci.org/targets/reference/tar_watch_server.html).
 
@@ -52,7 +52,7 @@ Every [`targets`](https://docs.ropensci.org/targets/) pipeline requires a `_targ
 
 ### Persistent background processes
 
-The pipeline needs to run in a background process that persists after the user logs out or the app itself exits. Before you launch a new process, first check if there is already an existing process running. [`tar_pid()`](https://docs.ropensci.org/targets/reference/tar_pid.html) retrieves the ID of the most recent process to run the pipeline, and [`ps::pid()`](https://ps.r-lib.org/reference/ps_pids.html) lists the IDs of all processes currently running. If no process is already running, optionally invoke [`shinybusy::show_spinner()`](https://dreamrs.github.io/shinybusy/reference/manual-spinner.html) to indicate that the pipeline is running, then start the [`targets`](https://docs.ropensci.org/targets/) pipeline in a persistent background process:
+The pipeline needs to run in a background process that persists after the user logs out or the app itself exits. Before you launch a new process, first check if there is already an existing process running. [`tar_pid()`](https://docs.ropensci.org/targets/reference/tar_pid.html) retrieves the ID of the most recent process to run the pipeline, and [`ps::pid()`](https://ps.r-lib.org/reference/ps_pids.html) lists the IDs of all processes currently running. If no process is already running, start the [`targets`](https://docs.ropensci.org/targets/) pipeline in a persistent background process:
 
 ```r
 processx_handle <- tar_make(
@@ -67,6 +67,8 @@ processx_handle <- tar_make(
 ```
 
 `cleanup = FALSE` keeps the process alive after the [`processx`](https://processx.r-lib.org) handle is garbage collected, and `supervise = FALSE` keeps process alive after the app itself exits. As long as the server keeps running, the pipeline will keep running. To help manage resources, the UI should have an action button to cancel the current process, and the server should automatically cancel it when the user deletes the project.
+
+The app should show whether the process is running at any given moment. At the UI level, you could either invoke [`shinybusy::show_spinner()`](https://dreamrs.github.io/shinybusy/reference/manual-spinner.html) or show/hide the "Run pipeline" action button with `show()` and `hide()` from the [`shinyjs`](https://deanattali.com/shinyjs/) package. In the server, use `invalidateLater()` and reactives to keep these UI elements up to date.
 
 ### Transient mode
 
