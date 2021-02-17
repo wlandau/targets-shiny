@@ -27,6 +27,12 @@ process_cancel <- function() {
   ps_kill(ps_handle(tar_pid()))
 }
 
+# Get the process ID of the pipeline if it exists
+process_id <- function() {
+  if (!project_exists() || !tar_exist_process()) return(NA_integer_)
+  tar_pid()
+}
+
 # Read the _targets/meta/process file to get the PID of the pipeline
 # and check if it is running.
 process_running <- function() {
@@ -36,6 +42,12 @@ process_running <- function() {
 # Check if the in-memory processx handle reported an exit status yet.
 process_not_done <- function(px) {
   is.null(px$get_exit_status())
+}
+
+# Status indicator that changes whenever a pipeline starts or stops.
+# Useful as a reactive value to update the UI at the proper time.
+process_status <- function() {
+  list(pid = process_id(), running = process_running())
 }
 
 # The PID in _targets/meta/process must agree with the
@@ -53,6 +65,7 @@ process_button <- function() {
   }
 }
 
+# Allow the user to modify inputs and run a new pipeline.
 process_show_running <- function() {
   hide("run_start")
   disable("biomarkers")
@@ -60,6 +73,8 @@ process_show_running <- function() {
   show("run_cancel")
 }
 
+# Disable UI inputs and prevent new pipelines from starting
+# while a pipeline is already running.
 process_show_stopped <- function() {
   hide("run_cancel")
   enable("biomarkers")

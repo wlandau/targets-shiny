@@ -20,16 +20,14 @@ server <- function(input, output, session) {
   tar_watch_server("targets-shiny")
   # Define a special reactive to invalidate contexts
   # when a pipeline starts or stops.
-  process <- reactiveValues(running = process_running())
-  # Repeatedly check if the pipeline switched from stopped to running
-  # or vice versa.
+  process <- reactiveValues(status = process_status())
   observe({
     invalidateLater(millis = 10)
-    process$running <- process_running()
+    process$status <- process_status()
   })
-  # Show/hide the run buttons depending on whether the pipeline is running.
+  # Refresh the UI to indicate whether the pipeline is running.
   observe({
-    process$running
+    process$status
     process_button()
   })
   # Every time the user selects a project in the drop-down menu
@@ -72,22 +70,27 @@ server <- function(input, output, session) {
   observeEvent(input$run_start, process_run())
   # Stop the pipeline if the user presses the appropriate button.
   observeEvent(input$run_cancel, process_cancel())
-  # Refresh the latest plot output when the pipeline stops.
+  # Refresh the latest plot output when the pipeline starts or stops
+  # or when the user switches the project.
   output$plot <- renderPlot({
     req(input$project)
-    process$running
+    process$status
     results_plot()
   })
   # Continuously refresh the stdout log file while the pipeline is running.
+  # Also refresh when the pipeline starts or stops
+  # and when the user switches projects.
   output$stdout <- renderText({
     req(input$project)
-    if (process$running) invalidateLater(millis = 100)
+    process$status
+    if (process$status$running) invalidateLater(millis = 100)
     log_text(project_stdout(), input$stdout_tail)
   })
-  # Continuously refresh the stdout log file while the pipeline is running.
+  # Same for stderr.
   output$stderr <- renderText({
     req(input$project)
-    if (process$running) invalidateLater(millis = 100)
+    process$status
+    if (process$status$running) invalidateLater(millis = 100)
     log_text(project_stderr(), input$stderr_tail)
   })
 }

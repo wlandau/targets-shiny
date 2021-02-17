@@ -68,15 +68,47 @@ processx_handle <- tar_make(
 
 `cleanup = FALSE` keeps the process alive after the [`processx`](https://processx.r-lib.org) handle is garbage collected, and `supervise = FALSE` keeps process alive after the app itself exits. As long as the server keeps running, the pipeline will keep running. To help manage resources, the UI should have an action button to cancel the current process, and the server should automatically cancel it when the user deletes the project.
 
-The app should show whether the process is running at any given moment. At the UI level, you could toggle a spinner and/or show/hide/enable/disable UI elements to prevent modifications while the pipeline is busy. Useful tools include [`show_spinner()`](https://dreamrs.github.io/shinybusy/reference/manual-spinner.html) from [`shinybusy`](/dreamrs.github.io/shinybusy/) and `show()`, `hide()`, `enable()`, and `disable()` from the [`shinyjs`](https://deanattali.com/shinyjs/) package. In the server, use `invalidateLater()` and custom reactive values to continuously refresh these UI elements.
-
 ### Transient mode
 
 For demonstration purposes, you may wish to deploy your app to a more limited service like [shinyapps.io](https://www.shinyapps.io). For these situations, consider implementing a transient mode to alert users and clean up resources. If this particular app is deployed with the `TARGETS_SHINY_TRANSIENT` environment variable equal to `"true"`, then:
 
-1. `tar_make()` runs with the `supervise = TRUE` `callr` argument so that all pipelines terminate when the R session exits.
+1. `tar_make()` runs with `supervise = TRUE` in `callr_arguments` so that all pipelines terminate when the R session exits.
 2. All user storage lives in a subdirectory of `tempdir()` so project files are automatically cleaned up.
 3. When the app starts, the UI shows a `shinyalert` to warn users about the above.
+
+### Monitor the background process
+
+The app should continuously check whether the process is running at any given moment:
+
+1. Check if a process ID is available using `targets::tar_exist_process()`.
+2. If possible, get the process ID of the most recent pipeline using `targets::tar_pid()`.
+3. Check if the process ID is in `ps::ps_pids()` to see if the pipeline is running.
+
+This particular app implements a `process_status()` function to do this.
+
+```r
+process_status()
+#> $pid
+#> [1] 19442
+#> 
+#> $running
+#> [1] FALSE
+```
+
+Inside the Shiny server function, we continuously refresh the status in a reactive value. 
+
+```r
+process <- reactiveValues(status = process_status())
+observe({
+  invalidateLater(millis = 10)
+  process$status <- process_status()
+})
+```
+
+This reactive value helps us:
+
+1. Only show certain UI elements if the pipeline is running. Use `process$status$running` to show activity or disable inputs when the pipeline is busy. Useful tools include [`show_spinner()`](https://dreamrs.github.io/shinybusy/reference/manual-spinner.html) from [`shinybusy`](/dreamrs.github.io/shinybusy/) and `show()`, `hide()`, `enable()`, and `disable()` from [`shinyjs`](https://deanattali.com/shinyjs/).
+2. Refresh output and logs when the pipeline starts or stops. Simply write `process$status` inside a reactive context such as `observe()` or `renderPlot()`.
 
 ### Progress
 
@@ -84,29 +116,24 @@ The [`tar_watch()`](https://docs.ropensci.org/targets/reference/tar_watch.html) 
 
 ### Logs
 
-The `stdout` and `stderr` log files provide cruder but more immediate information on the progress of the pipeline. To generate logs, set the `stdout` and `stderr` `callr` arguments as described previously. Then in the app server function, define text outputs that look something like this:
+The `stdout` and `stderr` log files provide cruder but more immediate information on the progress of the pipeline. To generate logs, set the `stdout` and `stderr` `callr` arguments as described previously. In the app server function, define text outputs that continuously refresh: every few milliseconds when the pipeline is running, once when the pipeline starts or stops, and once when the user switches projects. Below, you may wish to return just the last few lines instead of the full result of `readLines()`.
 
 ```r
-process <- reactiveValues(running = process_running())
-observe({
-  invalidateLater(millis = 100)
-  process$running <- process_running()
-})
 output$stdout <- renderText({
-  req(input$project) # name of the active project
-  if (process$running) invalidateLater(100)
+  req(input$project)
+  process$status
+  if (process$status$running) invalidateLater(100)
   readLines("/PATH/TO/USER/PROJECT/stdout.txt")
 })
 output$stderr <- renderText({
   req(input$project)
-  if (process$running) invalidateLater(100)
+  process$status
+  if (process$status$running) invalidateLater(100)
   readLines("/PATH/TO/USER/PROJECT/stderr.txt")
 })
 ```
 
-`process_running()` is a custom function that checks `targets::tar_pid()` and `ps::ps_pids()` to figure out if the pipeline is running. `process$running` is a reactive value that invalidates every time the pipeline switches from running to stopped (or vice versa) within 100 milliseconds. That way, the app only refreshes the logs if the pipeline is actually running or the user switches projects.
-
-Lastly, define text outputs in the UI that display proper line breaks and enable scrolling:
+In the UI, define text outputs that display proper line breaks and enable scrolling:
 
 ```r
 fluidRow(
@@ -117,20 +144,13 @@ fluidRow(
 )
 ```
 
-You might also create an input switch that lets the user print only the last few lines of each log. That way, viewers can watch the logs unfold in real time as the pipeline runs.
-
 ### Results
 
-[`targets`](https://docs.ropensci.org/targets/) stores the output of the pipeline in a `_targets/` folder at the project root. Use [`tar_read()`](https://docs.ropensci.org/targets/reference/tar_read.html) to return a result. We we want to avoid the performance costs of repeatedly reading from storage, so we use a reactive value to only do so when the pipeline starts or stops. Below, `process_running()` is a custom function that checks `targets::tar_pid()` and `ps::ps_pids()` to figure out if the pipeline is running.
+[`targets`](https://docs.ropensci.org/targets/) stores the output of the pipeline in a `_targets/` folder at the project root. Use [`tar_read()`](https://docs.ropensci.org/targets/reference/tar_read.html) to return a result. We use the `process$status` reactive value to refresh the data sparingly: once when the user switches projects and once when the pipeline starts or stops.
 
 ```r
-process <- reactiveValues(running = process_running())
-observe({
-  invalidateLater(millis = 100)
-  process$running <- process_running()
-})
 output$plot <- renderPlot({
-  req(input$project) # Refresh results when the user switches projects.
+  req(input$project)
   process$running
   tar_read(final_plot)
 })
