@@ -23,7 +23,7 @@ write_functions <- function(dir) {
     plot_samples <- function(samples) {
       ggplot(samples) +
         geom_density(aes(x = alpha, fill = biomarker), alpha = 0.5) +
-        theme_gray(16)
+        theme_gray(20)
     }
   })
 }
