@@ -42,6 +42,7 @@ Imports:
   shinycssloaders (>= 1.0.0),
   shinyWidgets (>= 0.5.7),
   targets (>= 0.1.0.9000),
+  tarchetypes (>= 0.0.4),
   tibble (>= 3.0.1),
   tidyr (>= 1.1.2),
   tools,
