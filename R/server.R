@@ -73,16 +73,19 @@ server <- function(input, output, session) {
   observeEvent(input$run_cancel, process_cancel())
   # Refresh the latest plot output when the pipeline stops.
   output$plot <- renderPlot({
+    req(input$project)
     process$running
     results_plot()
   })
   # Continuously refresh the stdout log file while the pipeline is running.
   output$stdout <- renderText({
+    req(input$project)
     if (process$running) invalidateLater(100)
     log_text(project_stdout())
   })
   # Continuously refresh the stdout log file while the pipeline is running.
   output$stderr <- renderText({
+    req(input$project)
     if (process$running) invalidateLater(100)
     log_text(project_stderr())
   })

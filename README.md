@@ -24,7 +24,8 @@ The Results tab refreshes the final plot every time the pipeline stops. The plot
 
 ## Development
 
-Shiny apps with [`targets`](https://docs.ropensci.org/targets/) require specialized techniques such as user storage and persistent background processes. 
+Shiny apps with [`targets`](https://docs.ropensci.org/targets/) require specialized techniques such as user storage and persistent background processes.
+
 ### User storage
 
 [`targets`](https://docs.ropensci.org/targets/) writes to storage to ensure the pipeline stays up to date after R exits. This storage must be persistent and user-specific. This particular app defaults to `tools::R_user_dir("app_name", which = "cache")` but uses `file.path(Sys.getenv("TARGETS_SHINY_HOME"), Sys.getenv("USER"))` if `TARGETS_SHINY_HOME` is defined in the `.Renviron` file at the app root directory. In addition, it is best to deploy to a service like [RStudio Server](https://rstudio.com/products/rstudio-server-pro/) or [RStudio Connect](https://rstudio.com/products/connect/) and provision enough space for the expected number of users. Unfortunately, [shinyapps.io](https://www.shinyapps.io) is not sufficient. Please consult your system administrator.
@@ -82,16 +83,18 @@ observe({
   process$running <- process_running()
 })
 output$stdout <- renderText({
+  req(input$project) # name of the active project
   if (process$running) invalidateLater(100)
   readLines("/PATH/TO/USER/PROJECT/stdout.txt")
 })
 output$stderr <- renderText({
+  req(input$project)
   if (process$running) invalidateLater(100)
   readLines("/PATH/TO/USER/PROJECT/stderr.txt")
 })
 ```
 
-`process_running()` is a custom function that checks `targets::tar_pid()` and `ps::ps_pids()` to figure out if the pipeline is running. `process$running` is a reactive value that invalidates every time the pipeline switches from running to stopped (or vice versa) within 100 milliseconds. That way, the app only watches the logs if the pipeline is actually running.
+`process_running()` is a custom function that checks `targets::tar_pid()` and `ps::ps_pids()` to figure out if the pipeline is running. `process$running` is a reactive value that invalidates every time the pipeline switches from running to stopped (or vice versa) within 100 milliseconds. That way, the app only refreshes the logs if the pipeline is actually running or the user switches projects.
 
 Lastly, define text outputs in the UI that display proper line breaks and enable scrolling:
 
@@ -115,8 +118,9 @@ observe({
   process$running <- process_running()
 })
 output$plot <- renderPlot({
+  req(input$project) # Refresh results when the user switches projects.
   process$running
-  results_plot()
+  tar_read(final_plot)
 })
 ```
 
