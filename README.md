@@ -35,7 +35,7 @@ Projects manage multiple versions of the pipeline. In this app, each project is 
 
 ### Working directory
 
-For reasons [described here](https://github.com/ropensci/targets/discussions/297), the `_targets.R` configuration file and `_targets/` data store always live at the root directory of the pipeline (where you run [`tar_make()`](https://docs.ropensci.org/targets/reference/tar_make.html)). So in order to run a pipeline in user storage, the app needs to change directories to the pipeline root. The `set_project()` function in this particular app accomplishes this, with a catch: the Shiny server function needs a callback to restore the working directory when the app exits.
+For reasons [described here](https://github.com/ropensci/targets/discussions/297), the `_targets.R` configuration file and `_targets/` data store always live at the root directory of the pipeline (where you run [`tar_make()`](https://docs.ropensci.org/targets/reference/tar_make.html)). So in order to run a pipeline in user storage, the app needs to change directories to the pipeline root. The best time to switch directories is when the user selects the corresponding project. This technique works as long as the Shiny server function uses a callback to restore the working directory when the app exits.
 
 ```r
 server <- function(input, output, session) {
@@ -49,10 +49,23 @@ server <- function(input, output, session) {
 
 Every [`targets`](https://docs.ropensci.org/targets/) pipeline requires a `_targets.R` configuration file and R scripts with supporting functions if applicable. The [`tar_helper()`](https://docs.ropensci.org/targets/reference/tar_helper.html) function writes arbitrary R scripts to the location of your choice, and tidy evaluation with `!!` is a convenient templating mechanism that translates Shiny UI inputs into target definitions. In this app, the functions in `R/pipeline.R` demonstrate the technique.
 
-### Multiple projects
-
-
 ### Persistent background processes
+
+The pipeline needs to run in a background process that persists after the user logs out or the app itself exits. Before you launch a new process, first check if there is already an existing process running. [`tar_pid()`](https://docs.ropensci.org/targets/reference/tar_pid.html) retrieves the ID of the most recent process to run the pipeline, and [`ps::pid()`](https://ps.r-lib.org/reference/ps_pids.html) lists the IDs of all processes currently running. If no process is already running, optionally invoke [`shinybusy::show_spinner()`](https://dreamrs.github.io/shinybusy/reference/manual-spinner.html) to indicate that the pipeline is running, then start the [`targets`](https://docs.ropensci.org/targets/) pipeline in a persistent background process:
+
+```r
+processx_handle <- tar_make(
+  callr_function = r_bg,
+  callr_arguments = list(
+    cleanup = FALSE,
+    supervise = FALSE,
+    stdout = "/PATH/TO/USER/PROJECT/stdout.txt",
+    stderr = "/PATH/TO/USER/PROJECT/stdout.txt"
+  )
+)
+```
+
+`cleanup = FALSE` keeps the process alive after the [`processx`](https://processx.r-lib.org) handle is garbage collected, and `supervise = FALSE` keeps process alive after the app itself exits. As long as the server keeps running, the pipeline will keep running. To help manage resources, the UI should have an action button to cancel the current process, and the server should automatically cancel it when the user deletes the project.
 
 ### Progress
 
