@@ -70,7 +70,7 @@ processx_handle <- tar_make(
 
 ### Scaling out to many users
 
-As described above, this particular app runs pipelines as persistent background processes on the server. This approach generalizes well across proprietary installations of RStudio Connect and RStudio Server, which is why it is featured here, but it may not scale well for a large number of users. Serious apps in production should instead consider submitting all background processes as jobs on a cluster like SLURM or a cloud computing platform like Amazon Web Services.
+As described above, this particular app runs pipelines as persistent background processes on the server. This approach generalizes well across proprietary installations of RStudio Connect and RStudio Server, which is why it is featured here. However, it will probably not scale well for a large number of users. Serious apps in production should instead consider submitting all background processes as jobs on a cluster like SLURM or a cloud computing platform like Amazon Web Services.
 
 ### Transient mode
 
