@@ -68,7 +68,7 @@ processx_handle <- tar_make(
 
 `cleanup = FALSE` keeps the process alive after the [`processx`](https://processx.r-lib.org) handle is garbage collected, and `supervise = FALSE` keeps process alive after the app itself exits. As long as the server keeps running, the pipeline will keep running. To help manage resources, the UI should have an action button to cancel the current process, and the server should automatically cancel it when the user deletes the project.
 
-The app should show whether the process is running at any given moment. At the UI level, you could either invoke [`shinybusy::show_spinner()`](https://dreamrs.github.io/shinybusy/reference/manual-spinner.html) or show/hide the "Run pipeline" action button with `show()` and `hide()` from the [`shinyjs`](https://deanattali.com/shinyjs/) package. In the server, use `invalidateLater()` and reactives to keep these UI elements up to date.
+The app should show whether the process is running at any given moment. At the UI level, you could toggle a spinner and/or show/hide/enable/disable UI elements to prevent modifications while the pipeline is busy. Useful tools include [`show_spinner()`](https://dreamrs.github.io/shinybusy/reference/manual-spinner.html) from [`shinybusy`](/dreamrs.github.io/shinybusy/) and `show()`, `hide()`, `enable()`, and `disable()` from the [`shinyjs`](https://deanattali.com/shinyjs/) package. In the server, use `invalidateLater()` and custom reactive values to continuously refresh these UI elements.
 
 ### Transient mode
 

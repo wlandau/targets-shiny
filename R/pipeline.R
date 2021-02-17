@@ -48,7 +48,7 @@ write_pipeline <- function(
       garbage_collection = TRUE
     )
     models <- tar_map(
-      values = list(biomarker = !!biomarkers),
+      values = list(biomarker = !!sort(biomarkers)),
       tar_fst_tbl(model, fit_model(data_biomarker, biomarker, !!iterations))
     )
     list(

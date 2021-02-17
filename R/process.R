@@ -55,10 +55,14 @@ process_button <- function() {
 
 process_show_running <- function() {
   hide("run_start")
+  disable("biomarkers")
+  disable("iterations")
   show("run_cancel")
 }
 
 process_show_stopped <- function() {
   hide("run_cancel")
+  enable("biomarkers")
+  enable("iterations")
   show("run_start")
 }

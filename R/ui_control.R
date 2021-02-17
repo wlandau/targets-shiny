@@ -51,18 +51,12 @@ card_models <- bs4Card(
   status = "primary",
   solidHeader = TRUE,
   width = 12,
-  pickerInput(
+  selectInput(
     inputId = "biomarkers",
     label = "Biomarkers",
     choices = c("albumin", "log_bilirubin", "log_platelet"),
     selected = c("albumin", "log_bilirubin"),
-    multiple = TRUE,
-    options = pickerOptions(
-      actionsBox = TRUE,
-      deselectAllText = "none",
-      selectAllText = "all",
-      noneSelectedText = "no label"
-    )
+    multiple = TRUE
   ),
   chooseSliderSkin("Flat", color = "blue"),
   sliderInput(
@@ -107,7 +101,7 @@ card_run <- bs4Card(
 tab_control <- bs4TabItem(
   "control",
   fluidRow(
-    column(6, card_create, card_select),
-    column(6, card_models, card_run)
+    column(6, card_select, card_create),
+    column(6, card_run, card_models)
   )
 )
