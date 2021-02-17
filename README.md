@@ -17,7 +17,7 @@ The Results tab refreshes the final plot every time the pipeline stops. The plot
 ## Administration
 
 1. Optional: to customize the location of persistent storage, create an `.Renviron` file at the app root and set the `TARGETS_SHINY_HOME` environment variable. If you do, the app will store projects within `file.path(Sys.getenv("TARGETS_SHINY_HOME"), Sys.getenv("USER"), ".targets-shiny")`. Otherwise, storage will default to `tools::R_user_dir("targets-shiny", which = "cache")`
-2. Deploy the app to [RStudio Server](https://rstudio.com/products/rstudio-server-pro/), [RStudio Connect](https://rstudio.com/products/connect/), or other service that supports persistent server-side storage. Unfortunantely, [shinyapps.io](https://www.shinyapps.io) is not sufficient.
+2. Deploy the app to [RStudio Server](https://rstudio.com/products/rstudio-server-pro/), [RStudio Connect](https://rstudio.com/products/connect/), or other service that supports persistent server-side storage. Unfortunately, [shinyapps.io](https://www.shinyapps.io) is not sufficient.
 3. Require a login so the app knows the user name.
 4. Run the app as the logged-in user, not the system administrator or default user.
 5. If applicable, raise automatic timeout thresholds in [RStudio Connect](https://rstudio.com/products/connect/) so the background processes running pipelines remain alive long enough to finish.
@@ -27,7 +27,19 @@ The Results tab refreshes the final plot every time the pipeline stops. The plot
 Shiny apps with [`targets`](https://docs.ropensci.org/targets/) require specialized techniques such as user storage and persistent background processes. 
 ### User storage
 
+[`targets`](https://docs.ropensci.org/targets/) writes to storage to ensure the pipeline stays up to date after R exits. This storage must be persistent and user-specific. `tools::R_user_dir("app_name", which = "cache")` covers some situations. In addition, it is best to deploy to a service like [RStudio Server](https://rstudio.com/products/rstudio-server-pro/) or [RStudio Connect](https://rstudio.com/products/connect/) and provision enough space for the expected number of users. Unfortunately, [shinyapps.io](https://www.shinyapps.io) is not sufficient. Please consult your system administrator.
+
 ### Working directory
+
+For reasons [described here](https://github.com/ropensci/targets/discussions/297), the `_targets.R` configuration file and `_targets/` data store always live at the root directory of the pipeline (where you run [`tar_make()`](https://docs.ropensci.org/targets/reference/tar_make.html)). So in order to run a pipeline in user storage, the app needs to change directories to the pipeline root. The `set_project()` function in this particular app accomplishes this, with a catch: the Shiny server function needs a callback to restore the working directory when the app exits.
+
+```r
+server <- function(input, output, session) {
+  dir <- getwd()
+  session$onSessionEnded(function() setwd(dir))
+  # ...
+}
+```
 
 ### Pipeline setup
 
