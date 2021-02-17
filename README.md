@@ -17,7 +17,7 @@ The Results tab refreshes the final plot every time the pipeline stops. The plot
 ## Administration
 
 1. Optional: to customize the location of persistent storage, create an `.Renviron` file at the app root and set the `TARGETS_SHINY_HOME` environment variable. If you do, the app will store projects within `file.path(Sys.getenv("TARGETS_SHINY_HOME"), Sys.getenv("USER"), ".targets-shiny")`. Otherwise, storage will default to `tools::R_user_dir("targets-shiny", which = "cache")`
-2. To support persistent pipelines, deploy the app to [RStudio Server](https://rstudio.com/products/rstudio-server-pro/), [RStudio Connect](https://rstudio.com/products/connect/), or other service that supports persistent server-side storage. Alternatively, if you just want to demo the app on a limited service such as [shinyapps.io](https://www.shinyapps.io), set the `TARGETS_SHINY_TRANSIENT` environment variable to `"true"` in the `.Renviron` file in the app root directory. That way, the UI alerts the users that their projects are transient, the app writes to temporary storage (overriding `TARGETS_TRANSIENT_HOME`), and background processes terminate when the app exits.
+2. To support persistent pipelines, deploy the app to [Shiny Server](https://rstudio.com/products/shiny/shiny-server/), [RStudio Connect](https://rstudio.com/products/connect/), or other service that supports persistent server-side storage. Alternatively, if you just want to demo the app on a limited service such as [shinyapps.io](https://www.shinyapps.io), set the `TARGETS_SHINY_TRANSIENT` environment variable to `"true"` in the `.Renviron` file in the app root directory. That way, the UI alerts the users that their projects are transient, the app writes to temporary storage (overriding `TARGETS_TRANSIENT_HOME`), and background processes terminate when the app exits.
 3. Require a login so the app knows the user name.
 4. Run the app as the logged-in user, not the system administrator or default user.
 5. If applicable, raise automatic timeout thresholds in [RStudio Connect](https://rstudio.com/products/connect/) so the background processes running pipelines remain alive long enough to finish.
@@ -28,7 +28,7 @@ Shiny apps with [`targets`](https://docs.ropensci.org/targets/) require speciali
 
 ### User storage
 
-[`targets`](https://docs.ropensci.org/targets/) writes to storage to ensure the pipeline stays up to date after R exits. This storage must be persistent and user-specific. This particular app defaults to `tools::R_user_dir("app_name", which = "cache")` but uses `file.path(Sys.getenv("TARGETS_SHINY_HOME"), Sys.getenv("USER"))` if `TARGETS_SHINY_HOME` is defined in the `.Renviron` file at the app root directory. In addition, it is best to deploy to a service like [RStudio Server](https://rstudio.com/products/rstudio-server-pro/) or [RStudio Connect](https://rstudio.com/products/connect/) and provision enough space for the expected number of users.
+[`targets`](https://docs.ropensci.org/targets/) writes to storage to ensure the pipeline stays up to date after R exits. This storage must be persistent and user-specific. This particular app defaults to `tools::R_user_dir("app_name", which = "cache")` but uses `file.path(Sys.getenv("TARGETS_SHINY_HOME"), Sys.getenv("USER"))` if `TARGETS_SHINY_HOME` is defined in the `.Renviron` file at the app root directory. In addition, it is best to deploy to a service like [Shiny Server](https://rstudio.com/products/shiny/shiny-server/) or [RStudio Connect](https://rstudio.com/products/connect/) and provision enough space for the expected number of users.
 
 ### Multiple projects
 
@@ -70,7 +70,7 @@ processx_handle <- tar_make(
 
 ### Scaling out to many users
 
-As described above, this particular app runs pipelines as persistent background processes on the server. This approach generalizes well across proprietary installations of RStudio Connect and RStudio Server, which is why it is featured here. However, it will probably not scale well for a large number of users. Serious apps in production should instead consider submitting all background processes as jobs on a cluster like SLURM or a cloud computing platform like Amazon Web Services.
+Serious scalable apps in production should submit pipelines and other long background processes as jobs on a cluster like SLURM or a cloud computing platform like Amazon Web Services. This particular app uses local server-side processes purely for pedagogical purposes: it is more likely to generalize across proprietary installations of [Shiny Server](https://rstudio.com/products/shiny/shiny-server/) and [RStudio Connect](https://rstudio.com/products/connect/).
 
 ### Transient mode
 
