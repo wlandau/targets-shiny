@@ -47,6 +47,7 @@ server <- function(input, output, session) {
 
 ### Pipeline setup
 
+Every [`targets`](https://docs.ropensci.org/targets/) pipeline requires a `_targets.R` configuration file and R scripts with supporting functions if applicable. The [`tar_helper()`](https://docs.ropensci.org/targets/reference/tar_helper.html) function writes arbitrary R scripts to the location of your choice, and tidy evaluation with `!!` is a convenient templating mechanism that translates Shiny UI inputs into target definitions. In this app, the functions in `R/pipeline.R` demonstrate the technique.
 
 ### Multiple projects
 
