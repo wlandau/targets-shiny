@@ -107,6 +107,8 @@ fluidRow(
 )
 ```
 
+You might also create an input switch that lets the user print only the last few lines of each log. That way, viewers can watch the logs unfold in real time as the pipeline runs.
+
 ### Results
 
 [`targets`](https://docs.ropensci.org/targets/) stores the output of the pipeline in a `_targets/` folder at the project root. Use [`tar_read()`](https://docs.ropensci.org/targets/reference/tar_read.html) to return a result. We we want to avoid the performance costs of repeatedly reading from storage, so we use a reactive value to only do so when the pipeline starts or stops. Below, `process_running()` is a custom function that checks `targets::tar_pid()` and `ps::ps_pids()` to figure out if the pipeline is running.
