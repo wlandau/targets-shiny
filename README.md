@@ -1,6 +1,6 @@
 This prototype app demonstrates how to create powerful data analysis tools with Shiny and [`targets`](https://docs.ropensci.org/targets/). The app manages multiple pipelines across multiple clients, and it ensures that user storage and background processes persist after logout. Because of [`targets`](https://docs.ropensci.org/targets/), subsequent runs skip computationally expensive steps that are already up to date.
 
-## The use case
+## Case study
 
 Bayesian joint models of survival and longitudinal non-survival outcomes reduce bias and describe relationships among endpoints ([Gould et al. 2015](https://pubmed.ncbi.nlm.nih.gov/24634327/)). Statisticians routinely refine and explore such complicated models ([Gelman et al. 2020](https://arxiv.org/abs/2011.01808)), but the computation is so slow that routine changes are tedious to refresh. This app shows how [`targets`](https://docs.ropensci.org/targets/) can speed up iteration and Shiny can ease the burden of code development for established use cases.
 
@@ -27,7 +27,7 @@ The Results tab refreshes the final plot every time the pipeline stops. The plot
 Shiny apps with [`targets`](https://docs.ropensci.org/targets/) require specialized techniques such as user storage and persistent background processes. 
 ### User storage
 
-[`targets`](https://docs.ropensci.org/targets/) writes to storage to ensure the pipeline stays up to date after R exits. This storage must be persistent and user-specific. `tools::R_user_dir("app_name", which = "cache")` covers some situations. In addition, it is best to deploy to a service like [RStudio Server](https://rstudio.com/products/rstudio-server-pro/) or [RStudio Connect](https://rstudio.com/products/connect/) and provision enough space for the expected number of users. Unfortunately, [shinyapps.io](https://www.shinyapps.io) is not sufficient. Please consult your system administrator.
+[`targets`](https://docs.ropensci.org/targets/) writes to storage to ensure the pipeline stays up to date after R exits. This storage must be persistent and user-specific. This particular app defaults to `tools::R_user_dir("app_name", which = "cache")` but uses `file.path(Sys.getenv("TARGETS_SHINY_HOME"), Sys.getenv("USER"))` if `TARGETS_SHINY_HOME` is defined in the `.Renviron` file at the app root directory. In addition, it is best to deploy to a service like [RStudio Server](https://rstudio.com/products/rstudio-server-pro/) or [RStudio Connect](https://rstudio.com/products/connect/) and provision enough space for the expected number of users. Unfortunately, [shinyapps.io](https://www.shinyapps.io) is not sufficient. Please consult your system administrator.
 
 ### Multiple projects
 
