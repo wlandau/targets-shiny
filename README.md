@@ -72,7 +72,7 @@ processx_handle <- tar_make(
 
 For demonstration purposes, you may wish to deploy your app to a more limited service like [shinyapps.io](https://www.shinyapps.io). For these situations, consider implementing a transient mode to alert users and clean up resources. If this particular app is deployed with `TARGETS_SHINY_TRANSIENT` equal to `"true"`, then:
 
-1. `tar_make()` runs with `supervise = TRUE` so the all pipelines terminate when the R session exits.
+1. `tar_make()` runs with the `supervise = TRUE` `callr` argument so that all pipelines terminate when the R session exits.
 2. All user storage lives in a subdirectory of `tempdir()` so project files are automatically cleaned up.
 3. When the app starts, the UI shows a `shinyalert` to warn users about the above.
 
