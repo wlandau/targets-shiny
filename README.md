@@ -61,7 +61,7 @@ processx_handle <- tar_make(
     cleanup = FALSE,
     supervise = FALSE,
     stdout = "/PATH/TO/USER/PROJECT/stdout.txt",
-    stderr = "/PATH/TO/USER/PROJECT/stdout.txt"
+    stderr = "/PATH/TO/USER/PROJECT/stderr.txt"
   )
 )
 ```
