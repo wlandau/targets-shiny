@@ -124,6 +124,10 @@ output$plot <- renderPlot({
 
 For years, [Eric Nantz](https://shinydevseries.com/authors/admin/) has advanced the space of enterprise Shiny in the life sciences. The motivation for this app comes from his work, and it borrows many of his techniques.
 
+## Code of Conduct
+  
+Please note that the `targets-shiny` project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+
 ## References
 
 1. Brilleman S. "Estimating Joint Models for Longitudinal and Time-to-Event Data with rstanarm." `rstanarm`, Stan Development Team, 2020. <https://cran.r-project.org/web/packages/rstanarm/vignettes/jm.html>
