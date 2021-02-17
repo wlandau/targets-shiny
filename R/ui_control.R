@@ -107,7 +107,7 @@ card_run <- bs4Card(
 tab_control <- bs4TabItem(
   "control",
   fluidRow(
-    column(6, card_select, card_create),
+    column(6, card_create, card_select),
     column(6, card_run, card_models)
   )
 )

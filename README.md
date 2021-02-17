@@ -1,42 +1,45 @@
-This prototype app explores the combination of Shiny and [`targets`](https://docs.ropensci.org/targets/) to run long pipelines with persistent user storage.
+This prototype app demonstrates how to create powerful data analysis tools with Shiny and [`targets`](https://docs.ropensci.org/targets/). The app manages multiple pipelines across multiple clients, and it ensures that user storage and background processes persist after logout. Because of [`targets`](https://docs.ropensci.org/targets/), subsequent runs skip computationally expensive steps that are already up to date.
 
-## Bayesian joint models
+## The use case
 
-Bayesian joint models of survival and longitudinal non-survival outcomes reduce bias and describe relationships among endpoints ([Gould et al. 2015](https://pubmed.ncbi.nlm.nih.gov/24634327/)). Statisticians routinely refine and explore such complicated models ([Gelman et al. 2020](https://arxiv.org/abs/2011.01808)), but the computation is so slow that routine changes are tedious to refresh.
+Bayesian joint models of survival and longitudinal non-survival outcomes reduce bias and describe relationships among endpoints ([Gould et al. 2015](https://pubmed.ncbi.nlm.nih.gov/24634327/)). Statisticians routinely refine and explore such complicated models ([Gelman et al. 2020](https://arxiv.org/abs/2011.01808)), but the computation is so slow that routine changes are tedious to refresh. This app shows how [`targets`](https://docs.ropensci.org/targets/) can speed up iteration and Shiny can ease the burden of code development for established use cases.
 
-## The `targets` R package
+## Usage
 
-The [`targets`](https://docs.ropensci.org/targets/) R package orchestrates tasks and skip steps that are already up to date, which reduces the runtime and speeds development in fields such as Bayesian data analysis, machine learning, simulation, clinical trials, and statistical genomics.
+When you first open the app, create a new project to establish a data analysis pipeline. You can create, switch, and delete projects at any time. Next, select the biomarkers and number of Markov chain Monte Carlo iterations. The pipeline will run one [univariate joint model](https://mc-stan.org/rstanarm/articles/jm.html#univariate-joint-model-current-value-association-structure) on each biomarker for the number of iterations you select. Each model analyzes [`rstanarm`](https://mc-stan.org/rstanarm/) datasets [`pbcLong`](https://mc-stan.org/rstanarm/reference/rstanarm-datasets.html) and [`pbcSurv`](https://mc-stan.org/rstanarm/reference/rstanarm-datasets.html) to jointly model survival (time to event) and the biomarker (longitudinally).
 
-## Shiny
+Click the "Run pipeline" button to run the correct models in the correct order. A spinner will appear in the upper right to show you that the pipeline is running in the background. The pipeline will run to completion even if you switch projects, log out, or get disconnected for idleness.
 
-This Shiny app contains a [`targets`](https://docs.ropensci.org/targets/) pipeline to run Bayesian joint models with [`rstanarm`](https://mc-stan.org/rstanarm/) ([Brilleman 2017](https://cran.r-project.org/web/packages/rstanarm/vignettes/jm.html)). This app can manage multiple projects with [persistent storage](https://blog.r-hub.io/2020/03/12/user-preferences/), and users can recover their projects and running [`targets`](https://docs.ropensci.org/targets/) pipelines after logging out and logging back in again.
+While the pipeline is running, the Progress and Logs tabs continuously refresh to monitor progress. The Progress tab uses the [`tar_watch()`](https://docs.ropensci.org/targets/reference/tar_watch.html) Shiny module, available through the functions [`tar_watch_ui()`](https://docs.ropensci.org/targets/reference/tar_watch_ui.html) and [`tar_watch_server()`](https://docs.ropensci.org/targets/reference/tar_watch_server.html).
+
+The Results tab refreshes the final plot every time the pipeline stops. The plot shows the marginal posterior distribution of the association parameter between mortality and the longitudinal biomarker.
 
 ## Administration
 
 1. Optional: to customize the location of persistent storage, create an `.Renviron` file at the app root and set the `TARGETS_SHINY_HOME` environment variable. If you do, the app will store projects within `file.path(Sys.getenv("TARGETS_SHINY_HOME"), Sys.getenv("USER"), ".targets-shiny")`. Otherwise, storage will default to `tools::R_user_dir("targets-shiny", which = "cache")`
-2. Deploy the app to [RStudio Server](https://rstudio.com/products/rstudio-server-pro/), [RStudio Connect](https://rstudio.com/products/connect/), or other service that supports persistent server-side storage.
-3. Be sure to require a login so the app knows the user name.
-4. Run the app as the logged-in user, not the system administrator.
-5. Raise automatic timeout thresholds on [RStudio Connect](https://rstudio.com/products/connect/) etc. so that worker processes remain alive long enough to finish pipelines in the background.
+2. Deploy the app to [RStudio Server](https://rstudio.com/products/rstudio-server-pro/), [RStudio Connect](https://rstudio.com/products/connect/), or other service that supports persistent server-side storage. Unfortunantely, [shinyapps.io](https://www.shinyapps.io) is not sufficient.
+3. Require a login so the app knows the user name.
+4. Run the app as the logged-in user, not the system administrator or default user.
+5. If applicable, raise automatic timeout thresholds in [RStudio Connect](https://rstudio.com/products/connect/) so the background processes running pipelines remain alive long enough to finish.
 
-## Usage
+## Development
 
-#### Analysis
+Shiny apps with [`targets`](https://docs.ropensci.org/targets/) require specialized techniques such as user storage and persistent background processes. 
+### User storage
 
-The app fits Bayesian joint models to the publicly available [`pbcLong`](https://mc-stan.org/rstanarm/reference/rstanarm-datasets.html) and [`pbcSurv`](https://mc-stan.org/rstanarm/reference/rstanarm-datasets.html) datasets in the [`rstanarm`](https://mc-stan.org/rstanarm/) package. The survival endpoint is time until death, and the longitudinal endpoint is the the biomarker of your choice. The app fits one [univariate joint model](https://mc-stan.org/rstanarm/articles/jm.html#univariate-joint-model-current-value-association-structure) for each biomarker you select. Adjust the number of MCMC iterations using the slider.
+### Working directory
 
-#### Projects
+### Pipeline setup
 
-You can save a new versions of the pipeline by creating a new project. These projects run independently and save storage to different locations.
+### Persistent background processes
 
-#### Runs
+### Progress
 
-When you are ready, click the "Run pipeline" button to run the models. Watch progress with the "Progress" tab, and optionally cancel the pipeline early with the "Cancel run" button. View the output in the "Results" tab. Successive runs with the same models will complete quickly because [`targets`](https://docs.ropensci.org/targets/) skips steps that are already up to date.
+### Logs
 
-#### Persistence
+### Results
 
-As long as the app is administered properly, you can safely log out and log back in. Any running pipelines will still be running, and data from all your projects will still be available.
+
 
 ## Thanks
 
