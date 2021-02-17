@@ -81,12 +81,12 @@ server <- function(input, output, session) {
   output$stdout <- renderText({
     req(input$project)
     if (process$running) invalidateLater(100)
-    log_text(project_stdout())
+    log_text(project_stdout(), input$stdout_tail)
   })
   # Continuously refresh the stdout log file while the pipeline is running.
   output$stderr <- renderText({
     req(input$project)
     if (process$running) invalidateLater(100)
-    log_text(project_stderr())
+    log_text(project_stderr(), input$stderr_tail)
   })
 }

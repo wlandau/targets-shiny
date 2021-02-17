@@ -13,7 +13,8 @@ write_functions <- function(dir) {
         time_var = "year",
         dataLong = data_biomarker,
         dataEvent = pbcSurv,
-        iter = iterations
+        iter = iterations,
+        refresh = min(iterations / 10, 50)
       )
       tibble(
         alpha = as.data.frame(model)[["Assoc|Long1|etavalue"]],
