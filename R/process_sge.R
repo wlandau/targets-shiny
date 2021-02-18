@@ -1,7 +1,7 @@
 # To run pipelines as jobs on a Sun Grid Engine (SGE) cluster,
 # Deploy the app with the TARGETS_SHINY_BACKEND environment variable
 # equal to "sge". Create an app-level .Renviron file for this.
-if (identical(Sys.getenv("TARGETS_SHINY_BACKEND"), "sge")) {
+if (identical(tolower(Sys.getenv("TARGETS_SHINY_BACKEND"), "sge"))) {
 
 # Run the pipeline in a new Sun Grid Engine (SGE) job
 # if no such job is already running in the current project.
