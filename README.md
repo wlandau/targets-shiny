@@ -1,5 +1,5 @@
 [![app](https://img.shields.io/badge/app-shinyapps.io-blue?style=flat&labelColor=gray)](https://wlandau.shinyapps.io/targets-shiny/)
-[![source](https://img.shields.io/badge/source-GitHub-success?style=flat&labelColor=gray)](https://wlandau.shinyapps.io/targets-shiny/)
+[![source](https://img.shields.io/badge/source-GitHub-success?style=flat&labelColor=gray)](https://github.com/wlandau/targets-shiny)
 [![wip](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
 ## Access
