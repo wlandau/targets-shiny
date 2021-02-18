@@ -42,13 +42,14 @@ process_submit <- function() {
   system2("qsub", path_job)
 }
 
+# The app passes this script to qsub when it submits the job.
 process_script <- "#!/bin/bash
-#$ -N { id }
+#$ -N {id}
 #$ -j y
-#$ -o { log_sge }
+#$ -o {log_sge}
 #$ -cwd
 #$ -V
-module load R/4.0.3
+module load R
 Rscript -e 'targets::tar_make(callr_arguments = list(stdout = \"{log_stdout}\", stderr = \"{log_stderr}\"))'"
 
 # Get the SGE job ID of the pipeline.
