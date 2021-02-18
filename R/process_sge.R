@@ -46,13 +46,16 @@ process_submit <- function() {
 }
 
 # The app passes this script to qsub when it submits the job.
-process_script <- "#!/bin/bash
-#$ -N {id}
-#$ -j y
-#$ -o {log_sge}
-#$ -cwd
-#$ -V
-module load R
+# The curly braces are glue patterns that the
+# process_submit() function populates.
+process_script <-  "#!/bin/bash
+#$ -N {id}          # Job name. Should be unique, short enough that qstat does not truncate it.
+#$ -j y             # Combine SGE stdout and stderr into one log file.
+#$ -o {log_sge}     # Log file.
+#$ -cwd             # Submit from the current working directory.
+#$ -V               # Use environment variables
+#$ -l h_rt=04:00:00 # Maximum runtime is 4 hours.
+module load R       # Load R as an environment module on the cluster. Pick the right version if applicable.
 Rscript -e 'targets::tar_make(callr_arguments = list(stdout = \"{log_stdout}\", stderr = \"{log_stderr}\"))'"
 
 # Get the SGE job ID of the pipeline.
