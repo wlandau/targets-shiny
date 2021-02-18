@@ -10,16 +10,19 @@ process_run <- function() {
   if (process_running()) return()
   # Block the session while the job is being submitted.
   control_running()
+  control_processing()
+  on.exit(control_processed())
   # Submit the job.
   process_submit()
-  # Give time for the job to queue. Should not need much.
-  Sys.sleep(0.5)
+  # Give time for the job to post.
+  Sys.sleep(1)
 }
 
 # Cancel the process if it is running.
 process_cancel <- function() {
   if (!project_exists()) return()
   if (!process_running()) return()
+  control_processing()
   system2("qdel", process_id())
 }
 

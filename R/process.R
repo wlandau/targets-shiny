@@ -8,6 +8,8 @@ process_run <- function() {
   if (!project_exists()) return()
   if (process_running()) return()
   control_running()
+  control_processing()
+  on.exit(control_processed())
   args <- list(
     cleanup = FALSE, # Important! Garbage collection should not kill the process.
     supervise = transient_active(), # Otherwise, the process will quit if we log out.
@@ -28,6 +30,7 @@ process_run <- function() {
 process_cancel <- function() {
   if (!project_exists()) return()
   if (!process_running()) return()
+  control_processing()
   ps_kill(ps_handle(tar_pid()))
 }
 

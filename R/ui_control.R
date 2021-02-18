@@ -95,6 +95,18 @@ card_run <- bs4Card(
       size = "sm",
       block = FALSE,
       no_outline = TRUE
+    ),
+    div(
+      style = "margin-left: 10px",
+      actionBttn(
+        inputId = "run_processing",
+        label = "Processing...",
+        style = "simple",
+        color = "royal",
+        size = "sm",
+        block = FALSE,
+        no_outline = TRUE
+      )
     )
   )
 )

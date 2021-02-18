@@ -1,4 +1,6 @@
 server <- function(input, output, session) {
+  # Hide/disable all UI controls until the app initializes.
+  control_hide()
   # Important! This app changes working directories to switch projects
   # (a requirement of the targets package).
   # So we need to reset the working directory when the app exits.
@@ -22,7 +24,7 @@ server <- function(input, output, session) {
   # when a pipeline starts or stops.
   process <- reactiveValues(status = process_status())
   observe({
-    invalidateLater(millis = 100)
+    invalidateLater(millis = 5000)
     process$status <- process_status()
   })
   # Refresh the UI to indicate whether the pipeline is running.
@@ -83,14 +85,14 @@ server <- function(input, output, session) {
   output$stdout <- renderText({
     req(input$project)
     process$status
-    if (process$status$running) invalidateLater(millis = 100)
+    if (process$status$running) invalidateLater(millis = 1000)
     log_text(project_stdout(), input$stdout_tail)
   })
   # Same for stderr.
   output$stderr <- renderText({
     req(input$project)
     process$status
-    if (process$status$running) invalidateLater(millis = 100)
+    if (process$status$running) invalidateLater(millis = 1000)
     log_text(project_stderr(), input$stderr_tail)
   })
 }

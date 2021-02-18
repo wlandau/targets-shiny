@@ -87,12 +87,12 @@ process_status()
 #> [1] FALSE
 ```
 
-Inside the Shiny server function, we continuously refresh the status in a reactive value. 
+Inside the Shiny server function, we continuously refresh the status in a reactive value. If polling is expensive (as on an SGE cluster, see below) then please be generous with `millis` in `invalidateLater()`. 
 
 ```r
 process <- reactiveValues(status = process_status())
 observe({
-  invalidateLater(millis = 10)
+  invalidateLater(millis = 5000)
   process$status <- process_status()
 })
 ```
@@ -123,19 +123,19 @@ The [`tar_watch()`](https://docs.ropensci.org/targets/reference/tar_watch.html) 
 
 ### Logs
 
-The `stdout` and `stderr` log files provide cruder but more immediate information on the progress of the pipeline. To generate logs, set the `stdout` and `stderr` `callr` arguments as described previously. In the app server function, define text outputs that continuously refresh: every few milliseconds when the pipeline is running, once when the pipeline starts or stops, and once when the user switches projects. Below, you may wish to return just the last few lines instead of the full result of `readLines()`.
+The `stdout` and `stderr` log files provide cruder but more immediate information on the progress of the pipeline. To generate logs, set the `stdout` and `stderr` `callr` arguments as described previously. In the app server function, define text outputs that continuously refresh: every few milliseconds when the pipeline is running, once when the pipeline starts or stops, and once when the user switches projects. Below, you may wish to return just the last few lines instead of the full result of `readLines()`. And again, please be generous with `millis` in `invalidateLater()` to avoid overburdening the server.
 
 ```r
 output$stdout <- renderText({
   req(input$project)
   process$status
-  if (process$status$running) invalidateLater(100)
+  if (process$status$running) invalidateLater(millis = 1000)
   readLines("/PATH/TO/USER/PROJECT/stdout.txt")
 })
 output$stderr <- renderText({
   req(input$project)
   process$status
-  if (process$status$running) invalidateLater(100)
+  if (process$status$running) invalidateLater(millis = 1000)
   readLines("/PATH/TO/USER/PROJECT/stderr.txt")
 })
 ```
