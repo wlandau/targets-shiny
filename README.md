@@ -4,7 +4,8 @@
 
 ## Access
 
-Visit <https://wlandau.shinyapps.io/targets-shiny/> to run this Shiny app in transient mode (described below). Visit <https://github.com/wlandau/targets-shiny> to access the source.
+* Visit <https://wlandau.shinyapps.io/targets-shiny/> to run this Shiny app in transient mode (described below).
+* Visit <https://github.com/wlandau/targets-shiny> for the source code.
 
 ## About
 
