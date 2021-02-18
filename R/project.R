@@ -76,13 +76,21 @@ project_select <- function(name = project_get(), choices = project_list()) {
   updatePickerInput(session, "project", NULL, name, choices)
 }
 
-# Create a directory for a new project but do not fill it.
+# Create a directory for a new project and switch to it,
+# but do not fill the directory.
 # project_save() populates and refreshes a project's files.
 project_create <- function(name) {
   name <- trimws(name)
-  marker <- basename(project_marker())
-  valid <- nzchar(name) && !(name %in% c(marker, project_list()))
-  if (valid) dir_create(project_path(name))
+  valid <- nzchar(name) &&
+    !(name %in% project_list()) &&
+    !grepl("[^[:alnum:]]", name)
+  if (!valid) {
+    shinyalert("Input error", "Project name must be completely alphanumeric.")
+    return()
+  }
+  dir_create(project_path(name))
+  project_select(name)
+  project_set(name)
 }
 
 # Delete a project but do not necessarily switch to another.

@@ -55,8 +55,6 @@ server <- function(input, output, session) {
   observeEvent(input$project_create, {
     req(input$project_new)
     project_create(input$project_new)
-    project_select(input$project_new)
-    project_set(input$project_new)
     project_save(input$biomarkers, input$iterations)
   })
   # When the user presses the button to delete a project,

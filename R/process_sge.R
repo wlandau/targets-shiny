@@ -52,7 +52,7 @@ process_submit <- function() {
 process_script <-  "#!/bin/bash
 #$ -N {id}          # Job name. Should be unique, short enough that qstat does not truncate it.
 #$ -j y             # Combine SGE stdout and stderr into one log file.
-#$ -o '{log_sge}'   # Log file.
+#$ -o {log_sge}     # Log file.
 #$ -cwd             # Submit from the current working directory.
 #$ -V               # Use environment variables
 #$ -l h_rt=04:00:00 # Maximum runtime is 4 hours.
