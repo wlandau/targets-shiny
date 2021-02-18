@@ -7,7 +7,7 @@ Visit https://wlandau.shinyapps.io/targets-shiny/ to run this Shiny app in trans
 
 ## About
 
-This prototype app, demonstrates how to create powerful data analysis tools with Shiny and [`targets`](https://docs.ropensci.org/targets/). The app manages multiple pipelines across multiple clients, and it ensures that user storage and background processes persist after logout. Because of [`targets`](https://docs.ropensci.org/targets/), subsequent runs skip computationally expensive steps that are already up to date.
+This prototype app demonstrates how to create powerful data analysis tools with Shiny and [`targets`](https://docs.ropensci.org/targets/). It manages multiple pipelines across multiple users, and if deployed to the right infrastructure, it ensures that user storage and background processes persist after logout. Because of [`targets`](https://docs.ropensci.org/targets/), subsequent runs skip computationally expensive steps that are already up to date.
 
 ## Case study
 
