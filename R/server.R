@@ -85,14 +85,14 @@ server <- function(input, output, session) {
   output$stdout <- renderText({
     req(input$project)
     process$status
-    if (process$status$running) invalidateLater(millis = 1000)
+    if (process$status$running) invalidateLater(millis = 250)
     log_text(project_stdout(), input$stdout_tail)
   })
   # Same for stderr.
   output$stderr <- renderText({
     req(input$project)
     process$status
-    if (process$status$running) invalidateLater(millis = 1000)
+    if (process$status$running) invalidateLater(millis = 250)
     log_text(project_stderr(), input$stderr_tail)
   })
 }
