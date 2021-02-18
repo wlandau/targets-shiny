@@ -17,5 +17,6 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 .Renviron
+.Rprofile
 deploy.R
 rsconnect
