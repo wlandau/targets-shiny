@@ -60,6 +60,13 @@ project_exists <- function() {
 # Internally switch the app to the project with the given name.
 project_set <- function(name) {
   writeLines(as.character(name), project_marker())
+  project_setwd(name)
+}
+
+# Switch directories to the project with the given name.
+# As discussed at https://github.com/ropensci/targets/discussions/297,
+# {targets} needs to run from the root of the current project.
+project_setwd <- function(name) {
   setwd(project_path(name))
 }
 
@@ -96,10 +103,12 @@ project_save <- function(biomarkers, iterations) {
   write_pipeline(project_path(name), biomarkers, iterations)
 }
 
-# Read the settings file of the current project
+# Set the working directory to the current project,
+# read the settings file of the current project
 # and update the UI to reflect the project's last known settings.
 project_load <- function() {
   if (!project_exists()) return()
+  project_setwd(project_get())
   session <- getDefaultReactiveDomain()
   settings <- readRDS(project_path(project_get(), "settings.rds"))
   updatePickerInput(session, "biomarkers", selected = settings$biomarkers)

@@ -51,23 +51,27 @@ card_models <- bs4Card(
   status = "primary",
   solidHeader = TRUE,
   width = 12,
-  awesomeCheckboxGroup(
-    inputId = "biomarkers",
-    label = "Biomarkers", 
-    choices = c("albumin", "log_bilirubin", "log_platelet"),
-    selected = c("albumin", "log_bilirubin"),
-    status = "primary",
-    inline = TRUE
+  disabled(
+    awesomeCheckboxGroup(
+      inputId = "biomarkers",
+      label = "Biomarkers", 
+      choices = c("albumin", "log_bilirubin", "log_platelet"),
+      selected = c("albumin", "log_bilirubin"),
+      status = "primary",
+      inline = TRUE
+    )
   ),
   chooseSliderSkin("Flat", color = "blue"),
-  sliderInput(
-    inputId = "iterations",
-    label = "Iterations",
-    value = 1000,
-    min = 100,
-    max = 10000,
-    step = 100,
-    ticks = FALSE
+  disabled(
+    sliderInput(
+      inputId = "iterations",
+      label = "Iterations",
+      value = 1000,
+      min = 100,
+      max = 10000,
+      step = 100,
+      ticks = FALSE
+    )
   )
 )
 
@@ -78,34 +82,40 @@ card_run <- bs4Card(
   solidHeader = TRUE,
   width = 12,
   fluidRow(
-    actionBttn(
-      inputId = "run_start",
-      label = "Run pipeline",
-      style = "simple",
-      color = "success",
-      size = "sm",
-      block = FALSE,
-      no_outline = TRUE
-    ),
-    actionBttn(
-      inputId = "run_cancel",
-      label = "Cancel pipeline",
-      style = "simple",
-      color = "warning",
-      size = "sm",
-      block = FALSE,
-      no_outline = TRUE
-    ),
-    div(
-      style = "margin-left: 10px",
+    hidden(
       actionBttn(
-        inputId = "run_processing",
-        label = "Processing...",
+        inputId = "run_start",
+        label = "Run pipeline",
         style = "simple",
-        color = "royal",
+        color = "success",
         size = "sm",
         block = FALSE,
         no_outline = TRUE
+      )
+    ),
+    hidden(
+      actionBttn(
+        inputId = "run_cancel",
+        label = "Cancel pipeline",
+        style = "simple",
+        color = "warning",
+        size = "sm",
+        block = FALSE,
+        no_outline = TRUE
+      )
+    ),
+    hidden(
+      div(
+        style = "margin-left: 10px",
+        actionBttn(
+          inputId = "run_processing",
+          label = "Processing...",
+          style = "simple",
+          color = "royal",
+          size = "sm",
+          block = FALSE,
+          no_outline = TRUE
+        )
       )
     )
   )
