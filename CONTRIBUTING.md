@@ -6,7 +6,7 @@ Development is a community effort, and we welcome participation.
 
 Please note that this package is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). 
 
-## Discussions
+## Discussions 
 
 At <https://github.com/wlandau/targets-shiny/discussions>, you can post general questions, brainstorm ideas, and ask for help.
 
