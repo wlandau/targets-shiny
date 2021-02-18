@@ -14,7 +14,9 @@ transient_alert <- function() {
   text <- paste(
     "This app is running in transient mode.",
     "When you log out, all your pipelines will stop",
-    "and all your projects will vanish."
+    "and all your projects will vanish.",
+    "Visit the 'About' tab to learn how to create",
+    "persistent projects and jobs on supporting infrastructure."
   )
   shinyalert("Transient mode", text = text, type = "info")
 }
