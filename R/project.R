@@ -75,7 +75,7 @@ project_create <- function(name) {
 
 # Delete a project but do not necessarily switch to another.
 project_delete <- function(name) {
-  dir_delete(project_path(name))
+  unlink(project_path(name), recursive = TRUE)
 }
 
 # Populate or refresh a project's files.

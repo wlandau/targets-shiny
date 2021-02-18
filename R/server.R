@@ -22,7 +22,7 @@ server <- function(input, output, session) {
   # when a pipeline starts or stops.
   process <- reactiveValues(status = process_status())
   observe({
-    invalidateLater(millis = 10)
+    invalidateLater(millis = 100)
     process$status <- process_status()
   })
   # Refresh the UI to indicate whether the pipeline is running.

@@ -1,0 +1,95 @@
+# Run the pipeline in a new Sun Grid Engine (SGE) job
+# if no such job is already running in the current project.
+process_run <- function() {
+  if (!project_exists()) return()
+  if (process_running()) return()
+  # Block the session while the job is being submitted.
+  process_show_running()
+  # Submit the job.
+  process_submit()
+  # Give time for the job to queue. Should not need much.
+  Sys.sleep(0.5)
+}
+
+# Cancel the process if it is running.
+process_cancel <- function() {
+  if (!project_exists()) return()
+  if (!process_running()) return()
+  system2("qdel", process_id())
+}
+
+# Submit a pipeline as an SGE job.
+process_submit <- function() {
+  # The process ID should be short enough that all of it
+  # shows up in qstat.
+  id <- paste0("t", digest(tempfile(), algo = "xxhash32"))
+  # Define other parameters for the job script.
+  log_sge <- project_path(project_get(), "sge.txt")
+  log_stdout <- project_stdout()
+  log_stderr <- project_stderr()
+  # Save files for the job shell script and the job ID.
+  path_job <- project_path(project_get(), "job.sh")
+  path_id <- project_path(project_get(), "id")
+  writeLines(glue(process_script), path_job)
+  writeLines(id, path_id)
+  Sys.chmod(path_job, mode = "0744")
+  # Submit the job.
+  system2("qsub", path_job)
+}
+
+process_script <- "#!/bin/bash
+#$ -N { id }
+#$ -j y
+#$ -o { log_sge }
+#$ -cwd
+#$ -V
+module load R/4.0.3
+Rscript -e 'targets::tar_make(callr_arguments = list(stdout = \"{log_stdout}\", stderr = \"{log_stderr}\"))'"
+
+# Get the SGE job ID of the pipeline.
+process_id <- function() {
+  path <- project_path(project_get(), "id")
+  if (any(file.exists(path))) {
+    readLines(path)
+  } else {
+    NA_character_
+  }
+}
+
+# Read the _targets/meta/process file to get the PID of the pipeline
+# and check if it is running.
+process_running <- function() {
+  any(grepl(process_id(), system2("qstat", stdout = TRUE)))
+}
+
+# Status indicator that changes whenever a pipeline starts or stops.
+# Useful as a reactive value to update the UI at the proper time.
+process_status <- function() {
+  list(pid = process_id(), running = process_running())
+}
+
+# Show/hide the run buttons depending on whether the pipeline is running.
+process_button <- function() {
+  if (process_running()) {
+    process_show_running()
+  } else {
+    process_show_stopped()
+  }
+}
+
+# Allow the user to modify inputs and run a new pipeline.
+process_show_running <- function() {
+  hide("run_start")
+  disable("biomarkers")
+  disable("iterations")
+  show("run_cancel")
+}
+
+# Disable UI inputs and prevent new pipelines from starting
+# while a pipeline is already running.
+process_show_stopped <- function() {
+  hide("run_cancel")
+  enable("biomarkers")
+  enable("iterations")
+  show("run_start")
+}

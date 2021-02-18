@@ -24,11 +24,13 @@ Imports:
   bayesplot (>= 1.8.0),
   bs4Dash (>= 2.0.0),
   callr (>= 3.4.3),
+  digest (>= 0.6.27),
   dplyr (>= 1.0.3),
   fs (>= 1.5.0)
   fst (>= 0.9.4)
   ggplot2 (>= 3.3.3),
-  gt (>= 0.2.2)
+  glue (>= 1.4.2),
+  gt (>= 0.2.2),
   markdown (>= 1.1),
   pingr (>= 2.0.1),
   ps (>= 1.5.0),
