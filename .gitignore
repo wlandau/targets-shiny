@@ -20,3 +20,4 @@ vignettes/*.pdf
 .Rprofile
 deploy.R
 rsconnect
+manifest.json
