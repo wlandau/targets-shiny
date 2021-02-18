@@ -50,10 +50,6 @@ server <- function(input, output, session) {
 
 Every [`targets`](https://docs.ropensci.org/targets/) pipeline requires a `_targets.R` configuration file and R scripts with supporting functions if applicable. The [`tar_helper()`](https://docs.ropensci.org/targets/reference/tar_helper.html) function writes arbitrary R scripts to the location of your choice, and tidy evaluation with `!!` is a convenient templating mechanism that translates Shiny UI inputs into target definitions. In this app, the functions in `R/pipeline.R` demonstrate the technique.
 
-### Scaling out to many users
-
-Serious scalable apps in production should submit pipelines and other long background processes as jobs on a cluster like SLURM or a cloud computing platform like Amazon Web Services. However, as described below, this particular app uses local server-side processes instead. The reasons are purely pedagogical: local processes are more likely to generalize across installations of [Shiny Server](https://rstudio.com/products/shiny/shiny-server/) and [RStudio Connect](https://rstudio.com/products/connect/).
-
 ### Persistent background processes
 
 This particular app runs pipelines as background processes that persist after the user logs out. Before you launch a new pipeline, first check if there is already an existing one running. [`tar_pid()`](https://docs.ropensci.org/targets/reference/tar_pid.html) retrieves the ID of the most recent process to run the pipeline, and [`ps::pid()`](https://ps.r-lib.org/reference/ps_pids.html) lists the IDs of all processes currently running. If no process is already running, start the [`targets`](https://docs.ropensci.org/targets/) pipeline in a persistent background process:
@@ -105,6 +101,10 @@ This reactive value helps us:
 
 1. Only show certain UI elements if the pipeline is running. Use `process$status$running` to show activity or disable inputs when the pipeline is busy. Useful tools include [`show_spinner()`](https://dreamrs.github.io/shinybusy/reference/manual-spinner.html) from [`shinybusy`](/dreamrs.github.io/shinybusy/) and `show()`, `hide()`, `enable()`, and `disable()` from [`shinyjs`](https://deanattali.com/shinyjs/).
 2. Refresh output and logs when the pipeline starts or stops. Simply write `process$status` inside a reactive context such as `observe()` or `renderPlot()`.
+
+### Scaling out to many users
+
+Serious scalable apps in production should long background processes as jobs on a cluster like SLURM or a cloud computing platform like Amazon Web Services. The [existing high-performance computing capabilities in `targets`](https://books.ropensci.org/targets/hpc.html) alleviate some of this, but the main process of each pipeline still runs locally. If this becomes too burdensome for the server, consider distributing these main processes as well. In this app, the file `R/process_sge.R` is an alternative to `R/process.R` for a Sun Grid Engine (SGE) cluster.
 
 ### Transient mode
 
