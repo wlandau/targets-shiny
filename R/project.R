@@ -19,6 +19,10 @@ project_path <- function(name, ...) {
   file.path(project_home(), name, ...)
 }
 
+project_marker <- function() {
+  project_path("_project")
+}
+
 # Identify the absolute path of the project's stdout log file.
 project_stdout <- function() {
   project_path(project_get(), "stdout.txt")
@@ -43,8 +47,8 @@ project_head <- function() {
 
 # Identify the project currently loaded.
 project_get <- function() {
-  path <- project_path("_project")
-  if (file.exists(path)) readLines(project_path("_project"))
+  path <- project_marker()
+  if (file.exists(path)) readLines(path)
 }
 
 # Determine if the user is currently in a valid project.
@@ -55,7 +59,7 @@ project_exists <- function() {
 
 # Internally switch the app to the project with the given name.
 project_set <- function(name) {
-  writeLines(as.character(name), project_path("_project"))
+  writeLines(as.character(name), project_marker())
   setwd(project_path(name))
 }
 
@@ -69,13 +73,15 @@ project_select <- function(name = project_get(), choices = project_list()) {
 # project_save() populates and refreshes a project's files.
 project_create <- function(name) {
   name <- trimws(name)
-  valid <- nzchar(name) && !(name %in% c("_project", project_list()))
+  marker <- basename(project_marker())
+  valid <- nzchar(name) && !(name %in% c(marker, project_list()))
   if (valid) dir_create(project_path(name))
 }
 
 # Delete a project but do not necessarily switch to another.
 project_delete <- function(name) {
   unlink(project_path(name), recursive = TRUE)
+  if (!length(project_list())) unlink(project_marker())
 }
 
 # Populate or refresh a project's files.

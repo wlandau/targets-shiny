@@ -1,10 +1,15 @@
+# To run pipelines as jobs on a Sun Grid Engine (SGE) cluster,
+# Deploy the app with the TARGETS_SHINY_BACKEND environment variable
+# equal to "sge". Create an app-level .Renviron file for this.
+if (identical(Sys.getenv("TARGETS_SHINY_BACKEND"), "sge")) {
+
 # Run the pipeline in a new Sun Grid Engine (SGE) job
 # if no such job is already running in the current project.
 process_run <- function() {
   if (!project_exists()) return()
   if (process_running()) return()
   # Block the session while the job is being submitted.
-  process_show_running()
+  control_running()
   # Submit the job.
   process_submit()
   # Give time for the job to queue. Should not need much.
@@ -59,7 +64,8 @@ process_id <- function() {
 # Read the _targets/meta/process file to get the PID of the pipeline
 # and check if it is running.
 process_running <- function() {
-  any(grepl(process_id(), system2("qstat", stdout = TRUE)))
+  id <- process_id()
+  !anyNA(id) && any(grepl(id, system2("qstat", stdout = TRUE)))
 }
 
 # Status indicator that changes whenever a pipeline starts or stops.
@@ -68,28 +74,4 @@ process_status <- function() {
   list(pid = process_id(), running = process_running())
 }
 
-# Show/hide the run buttons depending on whether the pipeline is running.
-process_button <- function() {
-  if (process_running()) {
-    process_show_running()
-  } else {
-    process_show_stopped()
-  }
-}
-
-# Allow the user to modify inputs and run a new pipeline.
-process_show_running <- function() {
-  hide("run_start")
-  disable("biomarkers")
-  disable("iterations")
-  show("run_cancel")
-}
-
-# Disable UI inputs and prevent new pipelines from starting
-# while a pipeline is already running.
-process_show_stopped <- function() {
-  hide("run_cancel")
-  enable("biomarkers")
-  enable("iterations")
-  show("run_start")
 }

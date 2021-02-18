@@ -1,9 +1,13 @@
+# The default behavior of the app is to run the pipeline
+# as a local background process on the Shiny server.
+if (identical(Sys.getenv("TARGETS_SHINY_BACKEND"), "")) {
+
 # Run the pipeline in a new background process if no such
 # process is already running in the current project.
 process_run <- function() {
   if (!project_exists()) return()
   if (process_running()) return()
-  process_show_running()
+  control_running()
   args <- list(
     cleanup = FALSE, # Important! Garbage collection should not kill the process.
     supervise = transient_active(), # Otherwise, the process will quit if we log out.
@@ -56,28 +60,4 @@ process_agrees <- function(px) {
   identical(px$get_pid(), tar_pid())
 }
 
-# Show/hide the run buttons depending on whether the pipeline is running.
-process_button <- function() {
-  if (process_running()) {
-    process_show_running()
-  } else {
-    process_show_stopped()
-  }
-}
-
-# Allow the user to modify inputs and run a new pipeline.
-process_show_running <- function() {
-  hide("run_start")
-  disable("biomarkers")
-  disable("iterations")
-  show("run_cancel")
-}
-
-# Disable UI inputs and prevent new pipelines from starting
-# while a pipeline is already running.
-process_show_stopped <- function() {
-  hide("run_cancel")
-  enable("biomarkers")
-  enable("iterations")
-  show("run_start")
 }

@@ -28,7 +28,7 @@ server <- function(input, output, session) {
   # Refresh the UI to indicate whether the pipeline is running.
   observe({
     process$status
-    process_button()
+    control_set()
   })
   # Every time the user selects a project in the drop-down menu
   # of the "Control" tab, switch to that project and load the settings.

@@ -104,7 +104,9 @@ This reactive value helps us:
 
 ### Scaling out to many users
 
-Serious scalable apps in production should long background processes as jobs on a cluster like SLURM or a cloud computing platform like Amazon Web Services. The [existing high-performance computing capabilities in `targets`](https://books.ropensci.org/targets/hpc.html) alleviate some of this, but the main process of each pipeline still runs locally. If this becomes too burdensome for the server, consider distributing these main processes as well. In this app, the file `R/process_sge.R` is an alternative to `R/process.R` for a Sun Grid Engine (SGE) cluster. The principles are similar.
+Serious scalable apps in production should long background processes as jobs on a cluster like SLURM or a cloud computing platform like Amazon Web Services. The [existing high-performance computing capabilities in `targets`](https://books.ropensci.org/targets/hpc.html) alleviate some of this, but the main process of each pipeline still runs locally. If this becomes too burdensome for the server, consider distributing these main processes as well.
+
+In this app, the file `R/process_sge.R` has analogous functions to `R/process.R` for a Sun Grid Engine (SGE) cluster. The principles are similar to the ones described above for local processes. To configure the app for SGE, set the `TARGETS_SHINY_BACKEND` environment variable equal to `"sge"` in an app-level `.Renviron` file.
 
 ### Transient mode
 
