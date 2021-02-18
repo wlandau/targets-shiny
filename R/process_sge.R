@@ -28,9 +28,10 @@ process_cancel <- function() {
 
 # Submit a pipeline as an SGE job.
 process_submit <- function() {
-  # The process ID should be short enough that all of it
+  # The process ID should be unique to the user and project name
+  # and it should be short enough that all of it
   # shows up in qstat.
-  id <- paste0("t", digest(tempfile(), algo = "xxhash32"))
+  id <- paste0("t", digest(project_path(project_get()), algo = "xxhash32"))
   # Define other parameters for the job script.
   log_sge <- project_path(project_get(), "sge.txt")
   log_stdout <- project_stdout()
@@ -51,7 +52,7 @@ process_submit <- function() {
 process_script <-  "#!/bin/bash
 #$ -N {id}          # Job name. Should be unique, short enough that qstat does not truncate it.
 #$ -j y             # Combine SGE stdout and stderr into one log file.
-#$ -o {log_sge}     # Log file.
+#$ -o '{log_sge}'   # Log file.
 #$ -cwd             # Submit from the current working directory.
 #$ -V               # Use environment variables
 #$ -l h_rt=04:00:00 # Maximum runtime is 4 hours.
