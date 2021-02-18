@@ -61,13 +61,13 @@ project_exists <- function() {
 project_set <- function(name) {
   writeLines(as.character(name), project_marker())
   project_setwd(name)
+  control_set()
 }
 
 # Switch directories to the project with the given name.
 # As discussed at https://github.com/ropensci/targets/discussions/297,
 # {targets} needs to run from the root of the current project.
 project_setwd <- function(name) {
-  control_processing()
   setwd(project_path(name))
 }
 

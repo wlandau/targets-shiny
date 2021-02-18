@@ -1,6 +1,4 @@
 server <- function(input, output, session) {
-  # Hide/disable all UI controls until the app initializes.
-  control_hide()
   # Important! This app changes working directories to switch projects
   # (a requirement of the targets package).
   # So we need to reset the working directory when the app exits.

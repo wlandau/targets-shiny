@@ -34,12 +34,3 @@ control_processing <- function() {
 control_processed <- function() {
   hide("run_processing")
 }
-
-# Hide/disable all UI controls until the app initializes.
-control_hide <- function() {
-  hide("run_start")
-  hide("run_cancel")
-  hide("run_processing")
-  disable("biomarkers")
-  disable("iterations")
-}
