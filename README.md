@@ -1,4 +1,4 @@
-[![app](https://img.shields.io/badge/shinyapps.io-blue?style=flat&labelColor=gray)](https://wlandau.shinyapps.io/targets-shiny/)
+[![app](https://img.shields.io/badge/app-shinyapps.io-blue?style=flat&labelColor=gray)](https://wlandau.shinyapps.io/targets-shiny/)
 [![wip](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
 ## Access
