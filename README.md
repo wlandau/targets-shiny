@@ -1,9 +1,10 @@
 [![app](https://img.shields.io/badge/app-shinyapps.io-blue?style=flat&labelColor=gray)](https://wlandau.shinyapps.io/targets-shiny/)
+[![source](https://img.shields.io/badge/source-GitHub-green?style=flat&labelColor=gray)](https://wlandau.shinyapps.io/targets-shiny/)
 [![wip](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
 ## Access
 
-Visit https://wlandau.shinyapps.io/targets-shiny/ to run this Shiny app in transient mode (described below).
+Visit <https://wlandau.shinyapps.io/targets-shiny/> to run this Shiny app in transient mode (described below). Visit <https://github.com/wlandau/targets-shiny> to access the source.
 
 ## About
 
