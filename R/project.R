@@ -67,6 +67,7 @@ project_set <- function(name) {
 # As discussed at https://github.com/ropensci/targets/discussions/297,
 # {targets} needs to run from the root of the current project.
 project_setwd <- function(name) {
+  control_processing()
   setwd(project_path(name))
 }
 
