@@ -104,9 +104,9 @@ card_run <- bs4Card(
         no_outline = TRUE
       )
     ),
-    hidden(
-      div(
-        style = "margin-left: 10px",
+    div(
+      style = "margin-left: 10px",
+      hidden(
         actionBttn(
           inputId = "run_processing",
           label = "Processing...",
