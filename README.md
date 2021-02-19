@@ -9,7 +9,7 @@
 
 ## About
 
-This prototype app demonstrates how to create powerful data analysis tools with Shiny and [`targets`](https://docs.ropensci.org/targets/). It manages multiple pipelines across multiple users, and if deployed to the right infrastructure, it ensures that user storage and background processes persist after logout. Because of [`targets`](https://docs.ropensci.org/targets/), subsequent runs skip computationally expensive steps that are already up to date.
+This prototype app demonstrates how to create powerful data analysis tools with Shiny and [`targets`](https://docs.ropensci.org/targets/). If deployed to appropriate infrastructure, it ensures that user storage and background processes persist after logout. The app recovers running jobs and saved data when the user logs back in. Because of [`targets`](https://docs.ropensci.org/targets/), subsequent runs skip computationally expensive steps that are already up to date.
 
 ## The case study
 

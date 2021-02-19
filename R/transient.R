@@ -17,7 +17,9 @@ transient_alert <- function() {
     "and all your projects will vanish.",
     "Visit the 'About' tab to learn how to create",
     "persistent projects and launch persistent jobs",
-    "on supporting infrastructure."
+    "on supporting infrastructure. That way, the app",
+    "can recover running jobs and saved data",
+    "when the user logs back in."
   )
   shinyalert("Transient mode", text = text, type = "info")
 }
