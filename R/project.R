@@ -152,14 +152,26 @@ project_save <- function(biomarkers, iterations) {
   write_pipeline(project_path(name), biomarkers, iterations)
 }
 
+# Load a project and handle errors gracefully.
+project_load <- function() {
+  tryCatch(project_load_try(), error = project_error)
+}
+
 # Set the working directory to the current project,
 # read the settings file of the current project
 # and update the UI to reflect the project's last known settings.
-project_load <- function() {
+# Try to load the project. Assumes the project is uncorrupted.
+# Errors should be handled gracefully.
+project_load_try <- function() {
   if (!project_exists()) return()
   project_setwd(project_get())
   session <- getDefaultReactiveDomain()
   settings <- readRDS(project_path(project_get(), "settings.rds"))
   updatePickerInput(session, "biomarkers", selected = settings$biomarkers)
   updateSliderInput(session, "iterations", value = settings$iterations)
+}
+
+# Handle a corrupted project.
+project_error <- function(error) {
+  shinyalert("Project is corrupted", conditionMessage(error))
 }
