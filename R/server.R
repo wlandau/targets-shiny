@@ -54,14 +54,20 @@ server <- function(input, output, session) {
     req(input$project_new)
     project_create(input$project_new)
   })
+  # For copied projects, copy over all the project files except
+  # _targets/meta/process (with the PID) and `id` (with the job ID).
+  observeEvent(input$project_copy, {
+    req(input$project_new)
+    project_copy(input$project_new)
+  })
   # When the user presses the button to delete a project,
   # remove the current project's files and switch to the next
   # available project. Be sure to cancel the deleted project's pipeline
   # first.
   observeEvent(input$project_delete, {
+    req(input$project)
     process_cancel()
     project_delete(input$project)
-    project_select(project_head())
   })
   # Run the pipeline if the user presses the appropriate button.
   observeEvent(input$run_start, process_run())

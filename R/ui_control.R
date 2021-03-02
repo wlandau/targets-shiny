@@ -13,7 +13,7 @@ card_create <- bs4Card(
   fluidRow(
     actionBttn(
       inputId = "project_create",
-      label = "Create new project",
+      label = "Create empty project",
       style = "simple",
       color = "primary",
       size = "sm",
@@ -37,7 +37,7 @@ card_create <- bs4Card(
 
 card_select <- bs4Card(
   inputID = "project",
-  title = "Select project",
+  title = "Select active project",
   status = "primary",
   solidHeader = TRUE,
   width = 12,
@@ -52,7 +52,7 @@ card_select <- bs4Card(
     inputId = "project_delete",
     label = "Delete selected project",
     style = "simple",
-    color = "primary",
+    color = "royal",
     size = "sm",
     block = FALSE,
     no_outline = TRUE

@@ -77,21 +77,59 @@ project_select <- function(name = project_get(), choices = project_list()) {
   updatePickerInput(session, "project", NULL, name, choices)
 }
 
-# Create a directory for a new project and switch to it,
-# but do not fill the directory.
-# project_save() populates and refreshes a project's files.
-project_create <- function(name) {
+# Initialize a project but do not switch to it.
+# This function has some safety checks on the project name.
+project_init <- function(name) {
   name <- trimws(name)
   valid <- nzchar(name) &&
     !(name %in% project_list()) &&
     !grepl("[^[:alnum:]]", name)
   if (!valid) {
-    shinyalert("Input error", "Project name must be completely alphanumeric.")
-    return()
+    shinyalert("Input error", "Project name must be unique and alphanumeric.")
+    return(FALSE)
   }
   dir_create(project_path(name))
+  TRUE
+}
+
+# Create a directory for a new project and switch to it,
+# but do not fill the directory.
+# project_save() populates and refreshes a project's files.
+project_create <- function(name) {
+  if (!project_init(name)) return()
   project_set(name)
   project_save(c("albumin", "log_bilirubin"), 1000L)
+  project_select(name)
+}
+
+# Copy over all files from the current project (if it exists)
+# except _targets/meta/process (with the PID) and `id` (with the job ID).
+project_copy <- function(name) {
+  old <- project_get()
+  if (is.null(old)) {
+    shinyalert("Cannot copy project.", "Select an active project first.")
+    return()
+  }
+  if (!project_init(name)) return()
+  show_modal_spinner(text = "Copying project...")
+  on.exit(remove_modal_spinner())
+  files <- c(
+    "_targets.R",
+    "functions.R",
+    "settings.rds",
+    "stderr.txt",
+    "stdout.txt"
+  )
+  for (file in files) {
+    if (file.exists(file)) {
+      file_copy(project_path(old, file), project_path(name, file))
+    }
+  }
+  if (dir.exists(project_path(old, "_targets"))) {
+    dir_copy(project_path(old, "_targets"), project_path(name, "_targets"))
+  }
+  unlink(project_path(name, "_targets", "meta", "process"))
+  project_set(name)
   project_select(name)
 }
 
@@ -99,6 +137,7 @@ project_create <- function(name) {
 project_delete <- function(name) {
   unlink(project_path(name), recursive = TRUE)
   if (!length(project_list())) unlink(project_marker())
+  project_select(project_head())
 }
 
 # Populate or refresh a project's files.

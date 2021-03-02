@@ -38,6 +38,7 @@ Imports:
   rstanarm (>= 2.21.1),
   shiny (>= 1.6.0),
   shinyalert (>= 2.0.0),
+  shinybusy (>= 0.2.2),
   shinycssloaders (>= 1.0.0),
   shinyjs (>= 2.0.0),
   shinyWidgets (>= 0.5.7),
