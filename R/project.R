@@ -173,5 +173,9 @@ project_load_try <- function() {
 
 # Handle a corrupted project.
 project_error <- function(error) {
-  shinyalert("Project is corrupted", conditionMessage(error))
+  shinyalert(
+    "Project is corrupted",
+    conditionMessage(error),
+    type = "error"
+  )
 }
