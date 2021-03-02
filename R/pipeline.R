@@ -32,7 +32,7 @@ write_functions <- function(dir) {
 # Write the _targets.R script to the project directory.
 write_pipeline <- function(
   dir,
-  biomarkers =  c("albumin", "log_bilirubin", "log_platelet"),
+  biomarkers =  c("albumin", "log_bilirubin"),
   iterations = 1000
 ) {
   tar_helper(file.path(dir, "_targets.R"), {

@@ -10,14 +10,28 @@ card_create <- bs4Card(
     value = NULL,
     placeholder = "Name of new project"
   ),
-  actionBttn(
-    inputId = "project_create",
-    label = "Create new project",
-    style = "simple",
-    color = "primary",
-    size = "sm",
-    block = FALSE,
-    no_outline = TRUE
+  fluidRow(
+    actionBttn(
+      inputId = "project_create",
+      label = "Create new project",
+      style = "simple",
+      color = "primary",
+      size = "sm",
+      block = FALSE,
+      no_outline = TRUE
+    ),
+    div(
+      style = "padding-left: 10px",
+      actionBttn(
+        inputId = "project_copy",
+        label = "Copy current project",
+        style = "simple",
+        color = "primary",
+        size = "sm",
+        block = FALSE,
+        no_outline = TRUE
+      )
+    )
   )
 )
 

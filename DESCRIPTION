@@ -41,15 +41,14 @@ Imports:
   shinycssloaders (>= 1.0.0),
   shinyjs (>= 2.0.0),
   shinyWidgets (>= 0.5.7),
-  targets (>= 0.1.0.9000),
-  tarchetypes (>= 0.0.4),
+  targets (>= 0.2.0),
+  tarchetypes (>= 0.1.0),
   tibble (>= 3.0.1),
   tidyr (>= 1.1.2),
   tools,
   visNetwork (>= 2.0.9)
 Remotes:
-  RinteRface/bs4Dash,
-  wlandau/targets
+  RinteRface/bs4Dash
 Encoding: UTF-8
 Language: en-US
 VignetteBuilder: knitr

@@ -48,12 +48,11 @@ server <- function(input, output, session) {
   })
   # When the user presses the button to create a project,
   # create a new project folder, populate it with the required files,
-  # and switch the app to the new project. Settings are copied over
-  # from the previously selected project.
+  # and switch the app to the new project.
+  # Settings revert to the global defaults.
   observeEvent(input$project_create, {
     req(input$project_new)
     project_create(input$project_new)
-    project_save(input$biomarkers, input$iterations)
   })
   # When the user presses the button to delete a project,
   # remove the current project's files and switch to the next

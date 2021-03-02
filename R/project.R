@@ -90,8 +90,9 @@ project_create <- function(name) {
     return()
   }
   dir_create(project_path(name))
-  project_select(name)
   project_set(name)
+  project_save(c("albumin", "log_bilirubin"), 1000L)
+  project_select(name)
 }
 
 # Delete a project but do not necessarily switch to another.
