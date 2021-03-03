@@ -81,7 +81,8 @@ project_select <- function(name = project_get(), choices = project_list()) {
 # This function has some safety checks on the project name.
 project_init <- function(name) {
   name <- trimws(name)
-  valid <- nzchar(name) &&
+  valid <- length(name) > 0L &&
+    nzchar(name) &&
     !(name %in% project_list()) &&
     identical(name, make.names(name))
   if (!valid) {
