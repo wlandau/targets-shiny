@@ -35,7 +35,8 @@ project_stderr <- function() {
 
 # Identify all the instantiated projects of the current user.
 project_list <- function() {
-  list.dirs(project_home(), full.names = FALSE, recursive = FALSE)
+  out <- list.dirs(project_home(), full.names = FALSE, recursive = FALSE)
+  setdiff(out, "_logs")
 }
 
 # Identify the first project in the project list.
