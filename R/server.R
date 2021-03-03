@@ -1,4 +1,6 @@
 server <- function(input, output, session) {
+  # Clear logs from deleted projects
+  project_clear_logs()
   # Important! This app changes working directories to switch projects
   # (a requirement of the targets package).
   # So we need to reset the working directory when the app exits.

@@ -83,9 +83,14 @@ project_init <- function(name) {
   name <- trimws(name)
   valid <- nzchar(name) &&
     !(name %in% project_list()) &&
-    !grepl("[^[:alnum:]]", name)
+    identical(name, make.names(name))
   if (!valid) {
-    shinyalert("Input error", "Project name must be unique and alphanumeric.")
+    msg <- paste(
+      "Project name must not conflict with other project names",
+      "and must not contain spaces, leading underscores,",
+      "or unsafe characters."
+    )
+    shinyalert("Input error", msg)
     return(FALSE)
   }
   dir_create(project_path(name))
@@ -178,4 +183,16 @@ project_error <- function(error) {
     conditionMessage(error),
     type = "error"
   )
+}
+
+# With the SGE backend, a project may create logs
+# outside the project's file system
+# (to avoid accidentally creating corrupted projects).
+# This function clears out logs from deleted projects.
+# Happens once on startup.
+project_clear_logs <- function() {
+  logs <- list.files(project_path("_logs"))
+  projects <- project_list()
+  delete <- setdiff(logs, projects)
+  file_delete(project_path("_logs", delete))
 }

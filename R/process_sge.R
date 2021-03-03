@@ -33,7 +33,10 @@ process_submit <- function() {
   # shows up in qstat.
   id <- paste0("t", digest(project_path(project_get()), algo = "xxhash32"))
   # Define other parameters for the job script.
-  log_sge <- project_path(project_get(), "sge.txt")
+  # Do not save the SGE log in the project directory.
+  # Otherwise, logs could get written after the project is deleted,
+  # which could create corrupted projects that are not supposed to exist.
+  log_sge <- project_path("_logs", project_get())
   log_stdout <- project_stdout()
   log_stderr <- project_stderr()
   # Save files for the job shell script and the job ID.
