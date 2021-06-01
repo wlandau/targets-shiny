@@ -1,6 +1,20 @@
-# Write an R script of pipeline helper functions to the project directory.
-write_functions <- function(dir) {
-  tar_helper(file.path(dir, "functions.R"), {
+# Write the _targets.R script to the project directory.
+write_pipeline <- function(
+  name,
+  biomarkers =  c("albumin", "log_bilirubin"),
+  iterations = 1000
+) {
+  tar_helper(project_path(name, "_targets.R"), {
+    library(dplyr)
+    library(targets)
+    library(tarchetypes)
+    library(tidyr)
+    options(crayon.enabled = FALSE)
+    tar_option_set(
+      packages = c("ggplot2", "rstanarm", "tibble"),
+      memory = "transient",
+      garbage_collection = TRUE
+    )
     get_data_biomarker <- function() {
       pbcLong %>%
         rename(log_bilirubin = logBili) %>%
@@ -26,27 +40,6 @@ write_functions <- function(dir) {
         geom_density(aes(x = alpha, fill = biomarker), alpha = 0.5) +
         theme_gray(20)
     }
-  })
-}
-
-# Write the _targets.R script to the project directory.
-write_pipeline <- function(
-  dir,
-  biomarkers =  c("albumin", "log_bilirubin"),
-  iterations = 1000
-) {
-  tar_helper(file.path(dir, "_targets.R"), {
-    library(dplyr)
-    library(targets)
-    library(tarchetypes)
-    library(tidyr)
-    source("functions.R")
-    options(crayon.enabled = FALSE)
-    tar_option_set(
-      packages = c("ggplot2", "rstanarm", "tibble"),
-      memory = "transient",
-      garbage_collection = TRUE
-    )
     models <- tar_map(
       values = list(biomarker = !!sort(biomarkers)),
       tar_fst_tbl(model, fit_model(data_biomarker, biomarker, !!iterations))

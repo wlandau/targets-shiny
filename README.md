@@ -11,6 +11,10 @@
 
 This prototype app demonstrates how to create powerful data analysis tools with Shiny and [`targets`](https://docs.ropensci.org/targets/). If deployed to appropriate infrastructure, it ensures that user storage and background processes persist after logout. The app recovers running jobs and saved data when the user logs back in. Because of [`targets`](https://docs.ropensci.org/targets/), subsequent runs skip computationally expensive steps that are already up to date.
 
+## Disclaimer
+
+This app requires `targets` >= 0.5.0.9000, which is still in development at the time of writing.
+
 ## The case study
 
 Bayesian joint models of survival and longitudinal non-survival outcomes reduce bias and describe relationships among endpoints ([Gould et al. 2015](https://pubmed.ncbi.nlm.nih.gov/24634327/)). Statisticians routinely refine and explore such complicated models ([Gelman et al. 2020](https://arxiv.org/abs/2011.01808)), but the computation is so slow that routine changes are tedious to refresh. This app shows how [`targets`](https://docs.ropensci.org/targets/) can speed up iteration and Shiny can ease the burden of code development for established use cases.
@@ -44,18 +48,6 @@ Shiny apps with [`targets`](https://docs.ropensci.org/targets/) require speciali
 ### Multiple projects
 
 Projects manage multiple versions of the pipeline. In this app, each project is a directory inside user storage with app input settings, pipeline configuration, and results. A top-level `_project` file identifies the current active project. Functions in `R/project.R` configure, load, create, and destroy projects. The `update*()` functions in Shiny and `shinyWidgets`, such as `updateSliderInput()`, are particularly handy for restoring the input settings of a saved project. That is why this app does not need a single `renderUI()` or `uiOutput()`.
-
-### Working directory
-
-For reasons [described here](https://github.com/ropensci/targets/discussions/297), the `_targets.R` configuration file and `_targets/` data store always live at the root directory of the pipeline (where you run [`tar_make()`](https://docs.ropensci.org/targets/reference/tar_make.html)). So in order to run a pipeline in user storage, the app needs to change directories to the pipeline root. The best time to switch directories is when the user selects the corresponding project. This technique works as long as the Shiny server function uses a callback to restore the working directory when the app exits.
-
-```r
-server <- function(input, output, session) {
-  dir <- getwd()
-  session$onSessionEnded(function() setwd(dir))
-  # ...
-}
-```
 
 ### Pipeline setup
 

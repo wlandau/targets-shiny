@@ -7,10 +7,11 @@ project_home <- function() {
   if (transient_active()) return(file.path(tempdir(), "targets-shiny"))
   home <- Sys.getenv("TARGETS_SHINY_HOME")
   if (identical(home, "")) {
-    R_user_dir("targets-shiny", "cache")
+    out <- R_user_dir("targets-shiny", "cache")
   } else {
-    file.path(home, Sys.getenv("USER"), ".targets-shiny")
+    out <- file.path(home, Sys.getenv("USER"), ".targets-shiny")
   }
+  path.expand(out)
 }
 
 # Identify the absolute file path of any file in a project
@@ -19,6 +20,8 @@ project_path <- function(name, ...) {
   file.path(project_home(), name, ...)
 }
 
+# Identify the path of the file that keeps track of the
+# currently selected project.
 project_marker <- function() {
   project_path("_project")
 }
@@ -61,15 +64,18 @@ project_exists <- function() {
 # Internally switch the app to the project with the given name.
 project_set <- function(name) {
   writeLines(as.character(name), project_marker())
-  project_setwd(name)
+  project_config_set(name)
   control_set()
 }
 
-# Switch directories to the project with the given name.
-# As discussed at https://github.com/ropensci/targets/discussions/297,
-# {targets} needs to run from the root of the current project.
-project_setwd <- function(name) {
-  setwd(project_path(name))
+# Switch to the target script file and data store
+# of the project with the given name.
+project_config_set <- function(name) {
+  targets::tar_config_set(
+    config = project_path(name, "_targets.yaml"),
+    script = project_path(name, "_targets.R"),
+    store = project_path(name, "_targets")
+  )
 }
 
 # Update the UI to reflect the identity of the current project.
@@ -155,8 +161,7 @@ project_save <- function(biomarkers, iterations) {
   name <- project_get()
   settings <- list(biomarkers = biomarkers, iterations = iterations)
   saveRDS(settings, project_path(name, "settings.rds"))
-  write_functions(project_path(name))
-  write_pipeline(project_path(name), biomarkers, iterations)
+  write_pipeline(name, biomarkers, iterations)
 }
 
 # Load a project and handle errors gracefully.
@@ -171,7 +176,7 @@ project_load <- function() {
 # Errors should be handled gracefully.
 project_load_try <- function() {
   if (!project_exists()) return()
-  project_setwd(project_get())
+  project_config_set(project_get())
   session <- getDefaultReactiveDomain()
   settings <- readRDS(project_path(project_get(), "settings.rds"))
   updatePickerInput(session, "biomarkers", selected = settings$biomarkers)

@@ -1,13 +1,8 @@
 server <- function(input, output, session) {
+  # 
+  tar_config_set()
   # Clear logs from deleted projects
   project_clear_logs()
-  # Important! This app changes working directories to switch projects
-  # (a requirement of the targets package).
-  # So we need to reset the working directory when the app exits.
-  # The proper way t odo this is with a Shiny callback.
-  # Simple on.exit() will not work.
-  dir <- getwd()
-  session$onSessionEnded(function() setwd(dir))
   # Alert users if the app is in transient mode.
   transient_alert()
   # Load the saved settings of the project into the biomarker
