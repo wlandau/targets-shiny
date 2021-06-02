@@ -1,6 +1,4 @@
 server <- function(input, output, session) {
-  # 
-  tar_config_set()
   # Clear logs from deleted projects
   project_clear_logs()
   # Alert users if the app is in transient mode.
@@ -14,7 +12,7 @@ server <- function(input, output, session) {
   project_select()
   # The tar_watch() module powers the "Progress" tab.
   # This is the server-side component.
-  tar_watch_server("targets-shiny")
+  tar_watch_server("targets-shiny", config = project_config())
   # Define a special reactive to invalidate contexts
   # when a pipeline starts or stops.
   process <- reactiveValues(status = process_status())

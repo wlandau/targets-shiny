@@ -76,7 +76,9 @@ process_id <- function() {
 # and check if it is running.
 process_running <- function() {
   id <- process_id()
-  !anyNA(id) && any(grepl(id, system2("qstat", stdout = TRUE)))
+  project_exists() &&
+    !anyNA(id) &&
+    any(grepl(id, system2("qstat", stdout = TRUE)))
 }
 
 # Status indicator that changes whenever a pipeline starts or stops.

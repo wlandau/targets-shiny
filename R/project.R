@@ -26,6 +26,11 @@ project_marker <- function() {
   project_path("_project")
 }
 
+# Identify the path of the YAML config file.
+project_config <- function() {
+  project_path("_targets.yaml")
+}
+
 # Identify the absolute path of the project's stdout log file.
 project_stdout <- function() {
   project_path(project_get(), "stdout.txt")
@@ -72,7 +77,7 @@ project_set <- function(name) {
 # of the project with the given name.
 project_config_set <- function(name) {
   targets::tar_config_set(
-    config = project_path(name, "_targets.yaml"),
+    config = project_config(),
     script = project_path(name, "_targets.R"),
     store = project_path(name, "_targets")
   )
