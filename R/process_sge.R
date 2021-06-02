@@ -39,6 +39,8 @@ process_submit <- function() {
   log_sge <- project_path("_logs", project_get())
   log_stdout <- project_stdout()
   log_stderr <- project_stderr()
+  script <- project_path(project_get(), "_targets.R")
+  store <- project_path(project_get(), "_targets")
   # Save files for the job shell script and the job ID.
   path_job <- project_path(project_get(), "job.sh")
   path_id <- project_path(project_get(), "id")
@@ -60,7 +62,7 @@ process_script <-  "#!/bin/bash
 #$ -V               # Use environment variables
 #$ -l h_rt=04:00:00 # Maximum runtime is 4 hours.
 module load R       # Load R as an environment module on the cluster. Pick the right version if applicable.
-Rscript -e 'targets::tar_make(callr_arguments = list(stdout = \"{log_stdout}\", stderr = \"{log_stderr}\"))'"
+Rscript -e 'targets::tar_make(callr_arguments = list(stdout = \"{log_stdout}\", stderr = \"{log_stderr}\"), script = \"{script}\", store = \"{store}\")'"
 
 # Get the SGE job ID of the pipeline.
 process_id <- function() {
