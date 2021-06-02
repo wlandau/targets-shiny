@@ -139,7 +139,7 @@ project_copy <- function(name) {
     "stdout.txt"
   )
   for (file in files) {
-    if (file.exists(file)) {
+    if (file.exists(project_path(old, file))) {
       file_copy(project_path(old, file), project_path(name, file))
     }
   }
