@@ -1,36 +1,16 @@
-card_stdout <- bs4Card(
-  inputID = "stdout",
-  title = "stdout",
-  status = "primary",
-  solidHeader = TRUE,
-  width = 6,
-  shinyWidgets::materialSwitch(
-    inputId = "stdout_tail",
-    label = "tail only",
-    value = TRUE,
-    status = "primary",
-    right = TRUE
-  ),
+card_stdout <- card(
+  id = "stdout",
+  tags$h3("Standard output"),
+  tags$hr(),
   textOutput("stdout"),
   # Makes sure the stdout log has appropriate line breaks and scrolling:
-  tags$head(tags$style("#stdout {white-space: pre-wrap; overflow-y:scroll; max-height: 600px;}"))
+  tags$head(tags$style("#stdout {white-space: pre-wrap}"))
 )
 
-card_stderr <- bs4Card(
-  inputID = "stderr",
-  title = "stderr",
-  status = "primary",
-  solidHeader = TRUE,
-  width = 6,
-  shinyWidgets::materialSwitch(
-    inputId = "stderr_tail",
-    label = "tail only",
-    value = TRUE,
-    status = "primary",
-    right = TRUE
-  ),
+card_stderr <- card(
+  id = "stderr",
+  tags$h3("Standard error"),
+  tags$hr(),
   textOutput("stderr"),
-  tags$head(tags$style("#stderr {white-space: pre-wrap; overflow-y:scroll; max-height: 600px;}"))
+  tags$head(tags$style("#stderr {white-space: pre-wrap}"))
 )
-
-tab_logs <- bs4TabItem("logs", fluidRow(card_stdout, card_stderr))

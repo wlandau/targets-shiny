@@ -5,11 +5,13 @@ write_pipeline <- function(
   iterations = 1000
 ) {
   tar_helper(project_path(name, "_targets.R"), {
-    library(dplyr)
-    library(targets)
-    library(tarchetypes)
-    library(tidyr)
-    options(crayon.enabled = FALSE)
+    suppressPackageStartupMessages({
+      library(dplyr)
+      library(targets)
+      library(tarchetypes)
+      library(tidyr)
+    })
+    options(cli.num_colors = 1)
     tar_option_set(
       packages = c("ggplot2", "rstanarm", "tibble"),
       memory = "transient",

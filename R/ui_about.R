@@ -1,10 +1,5 @@
-card_about <- bs4Card(
-  inputID = "about",
-  title = "About",
-  status = "primary",
-  solidHeader = TRUE,
-  width = 12,
+card_about <- card(
+  id = "about",
   includeMarkdown("README.md")
 )
 
-tab_about <- bs4TabItem("about", card_about)

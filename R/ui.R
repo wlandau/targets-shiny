@@ -1,36 +1,46 @@
 source("R/ui_control.R")
 source("R/ui_results.R")
-source("R/ui_progress.R")
 source("R/ui_logs.R")
 source("R/ui_about.R")
 
-tabs <- bs4TabItems(
-  tab_control,
-  tab_results,
-  tab_progress,
-  tab_logs,
-  tab_about
-)
-
-menu <- bs4SidebarMenu(
-  id = "menu",
-  bs4SidebarMenuItem("Control", tabName = "control", icon = icon("cog")),
-  bs4SidebarMenuItem("Results", tabName = "results", icon = icon("chart-area")),
-  bs4SidebarMenuItem("Progress", tabName = "progress", icon = icon("spinner")),
-  bs4SidebarMenuItem("Logs", tabName = "logs", icon = icon("file")),
-  bs4SidebarMenuItem("About", tabName = "about", icon = icon("info"))
-)
-
-body <- bs4DashBody(
-  useShinyalert(),
-  useShinyjs(),
-  add_busy_spinner(position = "top-left"),
-  tabs
-)
-
-ui <- bs4DashPage(
-  body = body,
-  header = bs4DashNavbar(title = "targets-shiny", controlbarIcon = NULL),
-  sidebar = bs4DashSidebar(skin = "light", inputId = "sidebar", menu),
-  dark = FALSE
+ui <- page_navbar(
+  title = "App",
+  
+nav_panel(
+    title = "Controls",
+    layout_columns(
+      col_widths = 6,
+      card_create,
+      card_select,
+      card_models,
+      card_run
+    ),
+    shinyjs::useShinyjs()
+  ),
+  
+  nav_panel(
+    title = "About",
+    card_about
+  ),
+  
+  nav_panel(
+    title = "Progress",
+    tar_watch_ui("targets-shiny", seconds = 15, targets_only = TRUE)
+  ),
+  nav_panel(
+    title = "Logs",
+    layout_columns(
+      col_widths = 6,
+      card_stdout,
+      card_stderr
+    )
+  ),
+  nav_panel(
+    title = "Results",
+     layout_columns(
+       col_widths = 6,
+       card_interpretation,
+       card_association
+     )
+  )
 )

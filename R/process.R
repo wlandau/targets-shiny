@@ -24,7 +24,8 @@ process_run <- function() {
     callr_function = r_bg,
     callr_arguments = args,
     script = script,
-    store = store
+    store = store,
+    reporter = "terse"
   )
   # Do not give back control until the pipeline write a _targets/meta/process
   # file with the PID of the main process.

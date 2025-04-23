@@ -1,12 +1,3 @@
-[![app](https://img.shields.io/badge/app-shinyapps.io-blue?style=flat&labelColor=gray)](https://wlandau.shinyapps.io/targets-shiny/)
-[![source](https://img.shields.io/badge/source-GitHub-success?style=flat&labelColor=gray)](https://github.com/wlandau/targets-shiny)
-[![wip](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
-
-## Access
-
-* <https://wlandau.shinyapps.io/targets-shiny/>: app running in transient mode
-* <https://github.com/wlandau/targets-shiny>: source code
-
 ## About
 
 This prototype app demonstrates how to create powerful data analysis tools with Shiny and [`targets`](https://docs.ropensci.org/targets/). If deployed to appropriate infrastructure, it ensures that user storage and background processes persist after logout. The app recovers running jobs and saved data when the user logs back in. Because of [`targets`](https://docs.ropensci.org/targets/), subsequent runs skip computationally expensive steps that are already up to date.
@@ -16,6 +7,8 @@ This prototype app demonstrates how to create powerful data analysis tools with 
 Bayesian joint models of survival and longitudinal non-survival outcomes reduce bias and describe relationships among endpoints ([Gould et al. 2015](https://pubmed.ncbi.nlm.nih.gov/24634327/)). Statisticians routinely refine and explore such complicated models ([Gelman et al. 2020](https://arxiv.org/abs/2011.01808)), but the computation is so slow that routine changes are tedious to refresh. This app shows how [`targets`](https://docs.ropensci.org/targets/) can speed up iteration and Shiny can ease the burden of code development for established use cases.
 
 ## Usage
+
+First, install the R package listed in `R/packages.R`. Then, the app locally with `shiny::runApp()`.
 
 When you first open the app, create a new project to establish a data analysis pipeline. You can create, switch, and delete projects at any time. Next, select the biomarkers and number of Markov chain Monte Carlo iterations. The pipeline will run one [univariate joint model](https://mc-stan.org/rstanarm/articles/jm.html#univariate-joint-model-current-value-association-structure) on each biomarker for the number of iterations you select. Each model analyzes [`rstanarm`](https://mc-stan.org/rstanarm/) datasets [`pbcLong`](https://mc-stan.org/rstanarm/reference/rstanarm-datasets.html) and [`pbcSurv`](https://mc-stan.org/rstanarm/reference/rstanarm-datasets.html) to jointly model survival (time to event) and the biomarker (longitudinally).
 
